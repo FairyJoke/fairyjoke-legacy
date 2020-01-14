@@ -1,0 +1,14 @@
+# App
+/.venv
+/logs
+
+# Config
+/.secretenv
+
+# Webassets
+.webassets-cache/
+
+# Python stuff
+__pycache__/
+*.py[cod]
+*$py.class

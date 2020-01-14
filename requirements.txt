@@ -1,0 +1,18 @@
+# Framework
+flask
+flask-assets
+flask-login
+flask-migrate
+flask-moment
+flask-sqlalchemy
+flask-wtf
+requests
+requests_futures
+pyjwt
+werkzeug
+
+# Front
+flask-assets
+
+# Deployment
+python-dotenv
