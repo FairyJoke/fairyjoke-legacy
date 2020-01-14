@@ -1,0 +1,2 @@
+# FairyJokeAPI
+Rhythm games database
