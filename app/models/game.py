@@ -2,6 +2,7 @@ from app import db
 
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    short_name = db.Column(db.String)
     series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
     platform_id = db.relationship(db.Integer, db.ForeignKey('platform.id'))
     main = db.Column(db.Boolean)
@@ -25,6 +26,7 @@ class Platform(db.Model):
 
 class Series(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    short_name = db.Column(db.String)
     name = db.Column(db.String)
     name_localized = db.Column(db.String)
     description = db.Column(db.String)

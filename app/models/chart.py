@@ -37,6 +37,27 @@ class LevelChange(db.Model):
     previous_value = db.Column(db.String)
     date = db.Column(db.DateTime)
 
+class SeriesSpecificChartEnum(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
+    name = db.Column(db.String)
+
+    values = db.relationship(
+        'SeriesSpecificChartEnumValue',
+        backref='enum',
+        lazy='dynamic'
+    )
+
+class SeriesSpecificChartEnumValue(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    enum_id = db.Column(db.Integer, db.ForeignKey('series_specific_chart_enum.id'))
+    name = db.Column(db.String)
+
+class SeriesSpecificChartEnumJoin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    chart_id = db.Column(db.Integer, db.ForeignKey('chart.id'))
+    enum_value_id = db.Column(db.Integer, db.ForeignKey('series_specific_chart_enum_value.id'))
+
 class SeriesSpecificChartProperty(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
