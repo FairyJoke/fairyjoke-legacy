@@ -22,7 +22,7 @@ def extractor(xml, definition, target):
     :param target: Where to assign the result
     '''
 
-    print('Extracting music info for', xml)
+    print('XML extractor initiated on', xml)
     for key in definition:
         rule = definition.get(key) or key
         if isinstance(rule, str):
