@@ -3,12 +3,12 @@ from flask import current_app, send_file
 from . import bp
 from .models import Music, Chart
 
-@bp.route('/api/music/<int:id>')
+@bp.route('/api/sdvx/songs/<int:id>')
 def get_music(id):
     return Music.query.get_or_404(id).as_dict()
 
-@bp.route('/api/music/<int:music_id>/jacket/<size>/<int:jacket_id>.png')
-@bp.route('/api/music/<int:music_id>/jacket/<int:jacket_id>.png')
+@bp.route('/api/sdvx/songs/<int:music_id>/jacket/<size>/<int:jacket_id>.png')
+@bp.route('/api/sdvx/songs/<int:music_id>/jacket/<int:jacket_id>.png')
 def get_jacket(music_id, jacket_id, size='medium'):
     size_repr = {
         'small': '_s',
