@@ -24,4 +24,7 @@ def get_jacket(music_id, jacket_id, size='medium'):
         jacket_id,
         size_repr[size]
     )
-    return send_file(path, mimetype='image/png')
+    try:
+        return send_file(path, mimetype='image/png')
+    except FileNotFoundError:
+        return 'File not found', 404
