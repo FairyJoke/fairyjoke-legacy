@@ -93,8 +93,8 @@ class Music(db.Model):
             'extra_diff_type',
         ])
         result['charts'] = {x.difficulty: dictify(x, [
-            'diff_name', 'jacket_id', 'level', 'illustrator', 'effected_by',
-            'limited', 'jacket_small_url', 'jacket_medium_url',
+            'diff_name', 'diff_short', 'jacket_id', 'level', 'illustrator',
+            'effected_by', 'limited', 'jacket_small_url', 'jacket_medium_url',
             'jacket_large_url',
         ]) for x in Chart.query.filter_by(music_id=self.id).all()}
         return result
@@ -130,7 +130,13 @@ class Chart(db.Model):
 
     @property
     def diff_name(self):
+        if self.difficulty == difficulty_as_int['INFINITE']:
+            return extra_diff_type_repr.get(self.music.extra_diff_type)
         return difficulty_repr.get(self.difficulty)
+
+    @property
+    def diff_short(self):
+        return difficulty_short_repr.get(self.diff_name)
 
     @property
     def jacket_small_url(self):
