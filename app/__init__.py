@@ -10,6 +10,7 @@ migrate = Migrate()
 moment = Moment()
 
 from .config import Config
+from .json_encoder import CustomJSONEncoder
 
 def init_blueprint(module, prefix=False, **kwargs):
     name = module[len(__name__) + 1:]
@@ -21,7 +22,7 @@ def init_blueprint(module, prefix=False, **kwargs):
         **kwargs
     )
 
-def create_app(config_path='fairyjoke.cfg'):
+def create_app(config_path='../fairyjoke.cfg'):
     os.environ['CONFIG_FILE'] = os.environ.get('CONFIG_FILE', config_path)
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -29,6 +30,8 @@ def create_app(config_path='fairyjoke.cfg'):
     db.init_app(app)
     migrate.init_app(app, db)
     moment.init_app(app)
+
+    app.json_encoder = CustomJSONEncoder
 
     for module in ['main', 'sdvx']:
         module = importlib.import_module('{}.{}'.format(__name__, module))

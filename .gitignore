@@ -3,6 +3,7 @@
 /logs
 /import
 *.db
+*.cfg
 
 # Config
 /.secretenv

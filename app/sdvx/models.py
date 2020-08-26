@@ -1,12 +1,15 @@
+from datetime import datetime
+from flask import url_for
+
 from .. import db, xml_utils
 from . import sdvx_xml
 
 difficulty_repr = {
-    0: 'NOVICE',
-    1: 'ADVANCED',
-    2: 'EXHAUST',
-    3: 'INFINITE',
-    4: 'MAXIMUM',
+    1: 'NOVICE',
+    2: 'ADVANCED',
+    3: 'EXHAUST',
+    4: 'INFINITE',
+    5: 'MAXIMUM',
 }
 
 difficulty_as_int = {v: k for k, v in difficulty_repr.items()}
@@ -29,6 +32,15 @@ extra_diff_type_repr = {
     5: 'VIVID',
 }
 
+def dictify(obj, members):
+    result = {}
+    for member in members:
+        value = getattr(obj, member)
+        if callable(value):
+            value = value(obj)
+        result[member] = value
+    return result
+
 class Music(db.Model):
     __tablename__ = 'sdvx_music'
 
@@ -48,6 +60,7 @@ class Music(db.Model):
     demo_pri = db.Column(db.Integer) # ?
     extra_diff_type = db.Column(db.Integer) # 0 = None, 2 = INF, 3 = GRV, 4 = HVN, 5 = VVD
     # Skipped: volume (all 91s), is_fixed (all 1s)
+    charts = db.relationship('Chart', backref='music')
 
     @staticmethod
     def from_xml(xml):
@@ -71,6 +84,24 @@ class Music(db.Model):
         }
         xml_utils.extractor(xml.find('info'), info_mapping, result)
         return result
+
+    def as_dict(self):
+        result = dictify(self, [
+            'id', 'label', 'title', 'title_yomigana', 'artist',
+            'artist_yomigana', 'ascii', 'bpm_max', 'bpm_min', 'release_date',
+            'background_id', 'genre_id', 'version', 'demo_pri',
+            'extra_diff_type',
+        ])
+        result['charts'] = {x.difficulty: dictify(x, [
+            'diff_name', 'jacket_id', 'level', 'illustrator', 'effected_by',
+            'limited', 'jacket_small_url', 'jacket_medium_url',
+            'jacket_large_url',
+        ]) for x in Chart.query.filter_by(music_id=self.id).all()}
+        return result
+
+    def get_music_folder(self):
+        return '{}_{}'.format(str(self.id).zfill(4), self.ascii)
+
 
 class Chart(db.Model):
     __tablename__ = 'sdvx_chart'
@@ -100,3 +131,18 @@ class Chart(db.Model):
     @property
     def diff_name(self):
         return difficulty_repr.get(self.difficulty)
+
+    @property
+    def jacket_small_url(self):
+        return url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='small', _external=True)
+
+    @property
+    def jacket_medium_url(self):
+        return url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='medium', _external=True)
+
+    @property
+    def jacket_large_url(self):
+        return url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='large', _external=True)
+
+    def get_jacket_path(self, id=None):
+        return 'jk_{}_{}.png'.format(str(self.music_id).zfill(4), id or self.jacket_id)

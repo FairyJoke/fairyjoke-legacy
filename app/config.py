@@ -15,3 +15,4 @@ class Config:
     LOGS_PATH = _get('LOGS_DIR', 'logs')
     ITEMS_LIMIT = 50
     MOMENT_DEFAULT_FORMAT='LLL'
+    SDVX_PATH = None
