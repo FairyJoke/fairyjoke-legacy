@@ -3,4 +3,8 @@
 python -m venv .venv
 ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/flask db upgrade
-./.venv/bin/flask run
+if [ "$1" == 'prod' ]; then
+	FLASK_RUN_PORT=57310 ./.venv/bin/flask run
+else
+	FLASK_DEBUG=1 FLASK_RUN_PORT=57310 ./.venv/bin/flask run
+fi
