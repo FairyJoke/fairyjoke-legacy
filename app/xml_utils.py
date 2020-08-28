@@ -22,7 +22,7 @@ def extractor(xml, definition, target):
     :param target: Where to assign the result
     '''
 
-    print('XML extractor initiated on', xml)
+    # print('XML extractor initiated on', xml)
     for key in definition:
         rule = definition.get(key) or key
         if isinstance(rule, str):
@@ -43,6 +43,6 @@ def extractor(xml, definition, target):
             print('Unrecognized definition mapping {}, ignoring...'.format(rule))
             continue
         setattr(target, key, value)
-        print('Assigned', key, 'to', value)
-    print('Finished updating', target)
+        # print('Assigned', key, 'to', value)
+    # print('Finished updating', target)
 

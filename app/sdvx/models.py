@@ -65,7 +65,7 @@ class Music(db.Model):
     @staticmethod
     def from_xml(xml):
         result = Music()
-        result.id = xml.get('id')
+        result.id = int(xml.get('id'))
         info_mapping = {
             'label': None,
             'title': 'title_name',
@@ -85,18 +85,19 @@ class Music(db.Model):
         xml_utils.extractor(xml.find('info'), info_mapping, result)
         return result
 
-    def as_dict(self):
+    def as_dict(self, include_charts=True):
         result = dictify(self, [
             'id', 'label', 'title', 'title_yomigana', 'artist',
             'artist_yomigana', 'ascii', 'bpm_max', 'bpm_min', 'release_date',
             'background_id', 'genre_id', 'version', 'demo_pri',
             'extra_diff_type',
         ])
-        result['charts'] = {x.difficulty: dictify(x, [
-            'diff_name', 'diff_short', 'jacket_id', 'level', 'illustrator',
-            'effected_by', 'limited', 'jacket_small_url', 'jacket_medium_url',
-            'jacket_large_url',
-        ]) for x in Chart.query.filter_by(music_id=self.id).all()}
+        if include_charts:
+            result['charts'] = {x.difficulty: dictify(x, [
+                'diff_name', 'diff_short', 'jacket_id', 'level', 'illustrator',
+                'effected_by', 'limited', 'jacket_small_url',
+                'jacket_medium_url', 'jacket_large_url',
+            ]) for x in Chart.query.filter_by(music_id=self.id).all()}
         return result
 
     def get_music_folder(self):
