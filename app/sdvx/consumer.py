@@ -3,9 +3,10 @@ import xml.etree.ElementTree as ET
 
 from . import sdvx_xml
 from .. import db
-from .models import Music, Chart
+from .models import Apeca, Chart, Music
 
-def import_from_xml(tree):
+def import_songs_from_xml(tree):
+    print('Importing songs...')
     for music_tag in tree:
         music = Music.from_xml(music_tag)
         db.session.merge(music)
@@ -14,15 +15,29 @@ def import_from_xml(tree):
             if chart.level != 0:
                 db.session.merge(chart)
     db.session.commit()
+    print('Done')
+
+def import_apecas_from_xml(tree):
+    print('Importing apecas...')
+    for card_tag in tree:
+        apeca = Apeca.from_xml(card_tag)
+        db.session.merge(apeca)
+    db.session.commit()
+    print('Done')
 
 def import_from_game_data(path):
-    with open('{}/others/music_db.xml'.format(path), encoding='shift_jisx0213') as f:
-        music_db_txt = sdvx_xml.translate(f.read())
-    import_from_xml(ET.fromstring(music_db_txt))
+    files = {
+        '{}/others/appeal_card.xml'.format(path): import_apecas_from_xml,
+        '{}/others/music_db.xml'.format(path): import_songs_from_xml,
+    }
+    for path, fun in files.items():
+        with open(path, encoding='shift-jis', errors='ignore') as f:
+            text = sdvx_xml.translate(f.read())
+        fun(ET.fromstring(text))
     update_jacket_ids(path)
 
 def update_jacket_ids(game_data_path, recheck=False):
-    # print('Initiated SDVX jackets ID discovery')
+    print('Updating jacket IDs...')
     for music in Music.query.all():
         folder = '{}/music/{}'.format(game_data_path, music.get_music_folder())
         # print('Working in', folder)
@@ -36,3 +51,4 @@ def update_jacket_ids(game_data_path, recheck=False):
             chart.jacket_id = i
             # print('Found file for ID', i)
     db.session.commit()
+    print('Done')

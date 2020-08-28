@@ -34,9 +34,10 @@ def extractor(xml, definition, target):
         elif callable(rule):
             value = rule(xml)
         elif isinstance(rule, dict):
-            tag = xml.find(rule.get('key', key))
+            name = rule.get('key', key)
+            tag = xml.find(name)
             if tag is None:
-                print('Could not find {}, ignoring...'.format(rule))
+                print('Could not find {}, ignoring...'.format(name))
                 continue
             value = rule['fun'](tag.text)
         else:
