@@ -16,3 +16,4 @@ class Config:
     ITEMS_LIMIT = 50
     MOMENT_DEFAULT_FORMAT='LLL'
     SDVX_PATH = None
+    PUBLIC_URI = 'https://fairyjoke.net'

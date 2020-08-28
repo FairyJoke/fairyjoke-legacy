@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import url_for
+from flask import current_app, url_for
 
 from .. import db, xml_utils
 from . import sdvx_xml
@@ -71,8 +71,12 @@ class Apeca(db.Model):
     def as_dict(self):
         return dictify(self, [
             'id', 'title', 'texture', 'illustrator', 'rarity', 'sort_no',
-            'genre_id',
+            'genre_id', 'url',
         ])
+
+    @property
+    def url(self):
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_apeca_pic', id=self.id)
 
 
 class Music(db.Model):
@@ -175,15 +179,15 @@ class Chart(db.Model):
 
     @property
     def jacket_small_url(self):
-        return url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='small', _external=True)
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='small')
 
     @property
     def jacket_medium_url(self):
-        return url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='medium', _external=True)
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='medium')
 
     @property
     def jacket_large_url(self):
-        return url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='large', _external=True)
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='large')
 
     def get_jacket_path(self, id=None):
         return 'jk_{}_{}.png'.format(str(self.music_id).zfill(4), id or self.jacket_id)
