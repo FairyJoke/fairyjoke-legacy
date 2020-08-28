@@ -2,12 +2,10 @@ import importlib
 import os
 from flask import Flask, Blueprint
 from flask_migrate import Migrate
-from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 migrate = Migrate()
-moment = Moment()
 
 from .config import Config
 from .json_encoder import CustomJSONEncoder
@@ -29,7 +27,6 @@ def create_app(config_path='../fairyjoke.cfg'):
     app.config.from_envvar('CONFIG_FILE', True)
     db.init_app(app)
     migrate.init_app(app, db)
-    moment.init_app(app)
 
     app.json_encoder = CustomJSONEncoder
 
