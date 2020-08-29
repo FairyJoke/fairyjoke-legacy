@@ -12,12 +12,22 @@ def search_music():
         'illustrator': Chart,
         'effected_by': Chart,
     }
+    level = request.args.get('level')
+    genre = request.args.get('genre')
     query = Chart.query.join(Music).with_entities(Chart.music_id)
     for key, table in search_fields.items():
         value = request.args.get(key)
         if not value:
             continue
         query = query.filter(getattr(table, key).ilike('%{}%'.format(value)))
+    if level:
+        query = query.filter(Chart.level == int(level))
+    if genre:
+        genre = int(genre)
+        if genre == 0:
+            query = query.filter(Music.genre_id == genre)
+        else:
+            query = query.filter(Music.genre_id.op('&')(genre))
     if omni:
         query = query.filter(
             Music.title.ilike('%{}%'.format(omni))
