@@ -11,4 +11,4 @@ def load_data(path):
 
 @bp.cli.command()
 def init():
-    return import_from_game_data(current_app.config.get('SDVX_PATH'))
+    return import_from_game_data(current_app.config.get('SDVX_PATH'), current_app.config.get('SDVX_EXTRA_PATH'))

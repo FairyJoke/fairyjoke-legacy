@@ -25,12 +25,17 @@ def import_apecas_from_xml(tree):
     db.session.commit()
     print('Done')
 
-def import_from_game_data(path):
+def import_from_game_data(path, extra_path=None):
     files = {
         '{}/others/appeal_card.xml'.format(path): import_apecas_from_xml,
         '{}/others/music_db.xml'.format(path): import_songs_from_xml,
     }
+    if extra_path:
+        files['{}/others/music_db.merged.xml'.format(extra_path)] = import_songs_from_xml
     for path, fun in files.items():
+        if not os.path.isfile(path):
+            print('Skipping unexisting file', path)
+            continue
         with open(path, encoding='cp932', errors='ignore') as f:
             text = sdvx_xml.translate(f.read())
         fun(ET.fromstring(text))
