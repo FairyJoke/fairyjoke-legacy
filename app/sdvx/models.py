@@ -179,15 +179,15 @@ class Chart(db.Model):
 
     @property
     def jacket_small_url(self):
-        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='small')
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music.id, jacket_id=self.jacket_id, size='small')
 
     @property
     def jacket_medium_url(self):
-        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='medium')
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music.id, jacket_id=self.jacket_id, size='medium')
 
     @property
     def jacket_large_url(self):
-        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket', music_id=self.music.id, jacket_id=self.jacket_id, size='large')
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music.id, jacket_id=self.jacket_id, size='large')
 
     def get_jacket_path(self, id=None):
         return 'jk_{}_{}.png'.format(str(self.music_id).zfill(4), id or self.jacket_id)
