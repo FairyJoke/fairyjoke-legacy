@@ -1,4 +1,4 @@
-from flask import current_app, send_file
+from flask import current_app, send_file, request
 
 from .. import bp
 from ..models import Apeca

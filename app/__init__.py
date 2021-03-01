@@ -1,6 +1,6 @@
 import importlib
 import os
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -9,6 +9,9 @@ migrate = Migrate()
 
 from .config import Config
 from .json_encoder import CustomJSONEncoder
+
+def is_strict():
+    return request.args.get('strict', False)
 
 def init_blueprint(module, prefix=False, **kwargs):
     name = module[len(__name__) + 1:]
