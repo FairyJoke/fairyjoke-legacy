@@ -82,6 +82,23 @@ class Apeca(db.Model):
 class Music(db.Model):
     __tablename__ = 'sdvx_music'
 
+    INFO_MAPPING = {
+        'label': None,
+        'title': 'title_name',
+        'title_yomigana': None,
+        'artist': 'artist_name',
+        'artist_yomigana': None,
+        'ascii': None,
+        'bpm_max': {'fun': sdvx_xml.bpmify},
+        'bpm_min': {'fun': sdvx_xml.bpmify},
+        'release_date': {'key': 'distribution_date', 'fun': sdvx_xml.dateify},
+        'background_id': {'key': 'bg_no', 'fun': int},
+        'genre_id': {'key': 'genre', 'fun': int},
+        'version': {'fun': int},
+        'demo_pri': {'fun': int},
+        'extra_diff_type': {'key': 'inf_ver', 'fun': int},
+    }
+
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String)
     title = db.Column(db.String)
@@ -100,27 +117,20 @@ class Music(db.Model):
     # Skipped: volume (all 91s), is_fixed (all 1s)
     charts = db.relationship('Chart', backref='music')
 
-    @staticmethod
-    def from_xml(xml):
-        result = Music()
+    @classmethod
+    def empty(cls):
+        result = cls()
+        result.id = 0
+        for key in cls.INFO_MAPPING:
+            setattr(result, key, '???')
+        result.extra_diff_type = 2
+        return result
+
+    @classmethod
+    def from_xml(cls, xml):
+        result = cls()
         result.id = int(xml.get('id'))
-        info_mapping = {
-            'label': None,
-            'title': 'title_name',
-            'title_yomigana': None,
-            'artist': 'artist_name',
-            'artist_yomigana': None,
-            'ascii': None,
-            'bpm_max': {'fun': sdvx_xml.bpmify},
-            'bpm_min': {'fun': sdvx_xml.bpmify},
-            'release_date': {'key': 'distribution_date', 'fun': sdvx_xml.dateify},
-            'background_id': {'key': 'bg_no', 'fun': int},
-            'genre_id': {'key': 'genre', 'fun': int},
-            'version': {'fun': int},
-            'demo_pri': {'fun': int},
-            'extra_diff_type': {'key': 'inf_ver', 'fun': int},
-        }
-        xml_utils.extractor(xml.find('info'), info_mapping, result)
+        xml_utils.extractor(xml.find('info'), cls.INFO_MAPPING, result)
         return result
 
     def as_dict(self, include_charts=True):
@@ -135,7 +145,8 @@ class Music(db.Model):
                 'diff_name', 'diff_short', 'jacket_id', 'level', 'illustrator',
                 'effected_by', 'limited', 'jacket_small_url',
                 'jacket_medium_url', 'jacket_large_url',
-            ]) for x in Chart.query.filter_by(music_id=self.id).all()}
+            ]) for x in (Chart.query.filter_by(music_id=self.id).all() if self.id > 0 else (Chart.empty(x) for x in range(1, 6)))
+            }
         return result
 
     def get_music_folder(self):
@@ -145,6 +156,14 @@ class Music(db.Model):
 class Chart(db.Model):
     __tablename__ = 'sdvx_chart'
 
+    INFO_MAPPING = {
+        'difficulty': lambda x: difficulty_as_int.get(x.tag.upper()),
+        'level': {'key': 'difnum', 'fun': int},
+        'illustrator': None,
+        'effected_by': None,
+        'limited': {'fun': int},
+    }
+
     music_id = db.Column(db.Integer, db.ForeignKey('sdvx_music.id'), primary_key=True)
     difficulty = db.Column(db.Integer, primary_key=True) # integer representation of the difficulty name, novice = 0, advanced = 1, exhaust = 2, infinite = 3, maximum = 4
     jacket_id = db.Column(db.Integer) # internal, does not exist in SDVX, tell which difficulty to use to resolve jacket name
@@ -153,18 +172,24 @@ class Chart(db.Model):
     effected_by = db.Column(db.String)
     limited = db.Column(db.Integer)
 
-    @staticmethod
-    def from_xml(xml, music_id=None):
-        result = Chart()
+    @classmethod
+    def empty(cls, id=0):
+        result = cls()
+        result.music = Music.empty()
+        result.music_id = 0
+        result.jacket_id = 0
+        for key in cls.INFO_MAPPING:
+            setattr(result, key, 0)
+        result.difficulty = id
+        result.illustrator = '???'
+        result.effected_by = '???'
+        return result
+
+    @classmethod
+    def from_xml(cls, xml, music_id=None):
+        result = cls()
         result.music_id = music_id
-        chart_mapping = {
-            'difficulty': lambda x: difficulty_as_int.get(x.tag.upper()),
-            'level': {'key': 'difnum', 'fun': int},
-            'illustrator': None,
-            'effected_by': None,
-            'limited': {'fun': int},
-        }
-        xml_utils.extractor(xml, chart_mapping, result)
+        xml_utils.extractor(xml, cls.INFO_MAPPING, result)
         return result
 
     @property
@@ -179,15 +204,15 @@ class Chart(db.Model):
 
     @property
     def jacket_small_url(self):
-        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music.id, jacket_id=self.jacket_id, size='small')
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music_id, jacket_id=self.jacket_id, size='small')
 
     @property
     def jacket_medium_url(self):
-        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music.id, jacket_id=self.jacket_id, size='medium')
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music_id, jacket_id=self.jacket_id, size='medium')
 
     @property
     def jacket_large_url(self):
-        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music.id, jacket_id=self.jacket_id, size='large')
+        return current_app.config.get('PUBLIC_URI') + url_for('.get_jacket_pic', music_id=self.music_id, jacket_id=self.jacket_id, size='large')
 
     def get_jacket_path(self, id=None):
         return 'jk_{}_{}.png'.format(str(self.music_id).zfill(4), id or self.jacket_id)
