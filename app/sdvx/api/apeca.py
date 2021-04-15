@@ -3,11 +3,11 @@ from flask import current_app, send_file, request
 from .. import bp
 from ..models import Apeca
 
-@bp.route('/api/sdvx/apecas/<int:id>')
+@bp.route('/apecas/<int:id>')
 def get_apeca(id):
     return Apeca.query.get_or_404(id).as_dict()
 
-@bp.route('/api/sdvx/apecas/<int:id>.png')
+@bp.route('/apecas/<int:id>.png')
 def get_apeca_pic(id):
     apeca = Apeca.query.get_or_404(id)
     path = '{}/graphics/ap_card/{}.png'.format(
