@@ -1,0 +1,8 @@
+{
+	"verboseOutput": true,
+	"reportMissingImports": "warning",
+	"reportMissingModuleSource": false,
+	"reportGeneralTypeIssues": false,
+	"executionEnvironments": [
+	]
+}

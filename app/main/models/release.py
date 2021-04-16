@@ -7,8 +7,8 @@ class Release(db.Model):
     region = db.relationship('Region', backref='releases')
     version_id = db.Column(db.Integer, db.ForeignKey('version.id'), nullable=False)
     version = db.relationship('Version', backref='releases')
-    release_type_id = db.Column(db.Integer, db.ForeignKey('release_type.id'))
-    release_type = db.relationship('ReleaseType', backref='releases')
+    type_id = db.Column(db.Integer, db.ForeignKey('release_type.id'))
+    type = db.relationship('ReleaseType', backref='releases')
     platform_id = db.Column(db.Integer, db.ForeignKey('platform.id'))
     platform = db.relationship('Platform', backref='releases')
     start_date = db.Column(db.Date)
@@ -20,5 +20,5 @@ class Release(db.Model):
             'end_date': self.end_date,
             'platform': self.platform.name if self.platform_id else None,
             'region': self.region.name if self.region_id else None,
-            'type': self.release_type.key if self.release_type_id else None,
+            'type': self.type.key if self.type_id else None,
         }

@@ -1,0 +1,14 @@
+group: BEMANI
+name: beatmania IIDX
+versions:
+  26:
+    name: beatmania IIDX 26 Rootage
+  27:
+    name: beatmania IIDX 27 HEROIC VERSE
+    releases:
+      - date: 2019-10-16
+        platform: arcade
+        region: JP
+        type: update
+  28:
+    name: beatmania IIDX 28 BISTROVER
