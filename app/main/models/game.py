@@ -1,4 +1,4 @@
-from app import db
+from app import db, http
 
 
 class Game(db.Model):
@@ -8,6 +8,11 @@ class Game(db.Model):
     group = db.relationship('GameGroup', backref='releases')
     key = db.Column(db.String, unique=True)
     name = db.Column(db.String)
+
+
+    @staticmethod
+    def are_versions_requested() -> bool:
+        return bool(http.get_params().get('with_versions'))
 
     @property
     def start_date(self):
@@ -48,7 +53,9 @@ class Game(db.Model):
             for k, v in self.versions_query_per_platform.items()
         }
 
-    def dictify(self, with_versions=False):
+    def dictify(self, with_versions=None):
+        if with_versions is None:
+            with_versions = self.are_versions_requested()
         result = {
             'name': self.name,
             'group': self.group.name if self.group_id else None,
