@@ -24,6 +24,10 @@ class Importer:
             setattr(target, key, data)
         return target
 
+    @staticmethod
+    def log(obj):
+        log.info(f'Imported {obj}')
+
     def run(self, dry=False, dump=False):
         folder = Path(self.FOLDER_PATH)
         datas = {}
@@ -39,10 +43,10 @@ class Importer:
                     continue
                 db.session.add(game)
                 db.session.commit()
-                logging.info(f'Imported {game}')
+                log.info('Committed')
             except Exception as e:
-                logging.error(f'Failed while importing {data}')
-                logging.error(e, exc_info=True)
+                log.error(f'Failed while importing {data}')
+                log.error(e, exc_info=True)
                 db.session.rollback()
 
 
@@ -76,6 +80,7 @@ class VersionImporter(Importer):
                 region=region,
                 type=type,
             )
+        self.log(result)
         return result
 
 
@@ -88,4 +93,5 @@ class GameImporter(Importer):
         self.update(result, 'group', data, GameGroup, 'name')
         for ver_key, ver_data in data.get('versions', {}).items():
             VersionImporter().run(ver_key, ver_data, game=result)
+        self.log(result)
         return result
