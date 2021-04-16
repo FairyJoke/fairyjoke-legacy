@@ -1,3 +1,5 @@
+from flask import url_for
+
 from app import db, http
 
 
@@ -21,7 +23,7 @@ class Game(db.Model):
     @property
     def versions_count(self):
         from . import Version
-        return Version.query.filter_by(game=self).count()
+        return Version.query.filter_by(game=self).count() or None
 
     @property
     def versions_query_per_platform(self):
@@ -49,7 +51,7 @@ class Game(db.Model):
     @property
     def versions_count_per_platform(self):
         return {
-            k: v.count()
+            k: v.count() or None
             for k, v in self.versions_query_per_platform.items()
         }
 
@@ -63,6 +65,7 @@ class Game(db.Model):
             'versions_count': self.versions_count,
             'versions_count_per_platform': self.versions_count_per_platform,
             'active': self.active,
+            'url': url_for('main.game', key=self.key),
         }
         if with_versions:
             result['versions'] = {x.key: x for x in self.versions},

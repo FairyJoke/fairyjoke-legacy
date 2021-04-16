@@ -65,17 +65,17 @@ class VersionImporter(Importer):
         self.update(result, 'name', data)
         for release in data.get('releases', []):
             platform = (
-                db_ext.upsert(Platform, name=release['platform'])
+                db_ext.upsert(Platform, name=release['platform'], commit=True)
                 if 'platform' in release
                 else None
             )
             region = (
-                db_ext.upsert(Region, key=release['region'])
+                db_ext.upsert(Region, key=release['region'], commit=True)
                 if 'region' in release
                 else None
             )
             type = (
-                db_ext.upsert(ReleaseType, key=release['type'])
+                db_ext.upsert(ReleaseType, key=release['type'], commit=True)
                 if 'type' in release
                 else None
             )
