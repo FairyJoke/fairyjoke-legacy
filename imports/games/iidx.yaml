@@ -1,0 +1,70 @@
+active: true
+group: BEMANI
+name: beatmania IIDX
+versions:
+  1:
+    name: beatmania IIDX
+    releases:
+      - date: 1999-02-26
+        platform: arcade
+  substream:
+    name: beatmania IIDX substream
+  2:
+    name: beatmania IIDX 2nd style
+  3:
+    name: beatmania IIDX 3rd style
+  4:
+    name: beatmania IIDX 4th style
+  5:
+    name: beatmania IIDX 5th style
+  6:
+    name: beatmania IIDX 6th style
+  7:
+    name: beatmania IIDX 7th style
+  8:
+    name: beatmania IIDX 8th style
+  9:
+    name: beatmania IIDX 9th style
+  10:
+    name: beatmania IIDX 10th style
+  11:
+    name: beatmania IIDX 11 IIDX RED
+  12:
+    name: beatmania IIDX 12 HAPPY SKY
+  13:
+    name: beatmania IIDX 13 DistorteD
+  14:
+    name: beatmania IIDX 14 GOLD
+  15:
+    name: beatmania IIDX 15 DJ TROOPERS
+  16:
+    name: beatmania IIDX 16 EMPRESS
+  17:
+    name: beatmania IIDX 17 SIRIUS
+  18:
+    name: beatmania IIDX 18 Resort Anthem
+  19:
+    name: beatmania IIDX 19 Lincle
+  20:
+    name: beatmania IIDX 20 tricoro
+  21:
+    name: beatmania IIDX 21 SPADA
+  22:
+    name: beatmania IIDX 22 PENDUAL
+  23:
+    name: beatmania IIDX 23 copula
+  24:
+    name: beatmania IIDX 24 SINOBUZ
+  25:
+    name: beatmania IIDX 25 CANNON BALLERS
+  26:
+    name: beatmania IIDX 26 Rootage
+  27:
+    name: beatmania IIDX 27 HEROIC VERSE
+    releases:
+      - date: 2019-10-16
+        platform: arcade
+        region: JP
+        type: update
+  28:
+    name: beatmania IIDX 28 BISTROVER

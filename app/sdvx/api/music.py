@@ -4,7 +4,7 @@ from app import is_strict
 from .. import bp
 from ..models import Chart, Music
 
-@bp.route('/api/sdvx/songs')
+@bp.route('/songs')
 def search_music():
     omni = request.args.get('omni')
     search_fields = {
@@ -45,7 +45,7 @@ def search_music():
     return jsonify([x.as_dict() for x in Music.query.filter(Music.id.in_(results)).all()])
 
 
-@bp.route('/api/sdvx/songs/<int:id>')
+@bp.route('/songs/<int:id>')
 def get_music(id):
     result =  Music.query.get(id)
     if not result:
@@ -55,8 +55,8 @@ def get_music(id):
     result = result.as_dict()
     return result
 
-@bp.route('/api/sdvx/songs/<int:music_id>/jacket/<size>/<int:jacket_id>.png')
-@bp.route('/api/sdvx/songs/<int:music_id>/jacket/<int:jacket_id>.png')
+@bp.route('/songs/<int:music_id>/jacket/<size>/<int:jacket_id>.png')
+@bp.route('/songs/<int:music_id>/jacket/<int:jacket_id>.png')
 def get_jacket_pic(music_id, jacket_id, size='medium'):
     size_repr = {
         'small': '_s',
