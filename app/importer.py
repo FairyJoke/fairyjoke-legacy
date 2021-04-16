@@ -90,6 +90,7 @@ class GameImporter(Importer):
 
         result = db_ext.upsert(Game, key=key)
         self.update(result, 'name', data)
+        self.update(result, 'active', data)
         self.update(result, 'group', data, GameGroup, 'name')
         for ver_key, ver_data in data.get('versions', {}).items():
             VersionImporter().run(ver_key, ver_data, game=result)
