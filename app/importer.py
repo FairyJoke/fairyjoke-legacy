@@ -28,7 +28,15 @@ class Importer:
     def log(obj):
         log.info(f'Imported {obj}')
 
+    def commit(self, obj):
+        if self.dry:
+            return
+        db.session.add(obj)
+        db.session.commit()
+        log.info('Committed')
+
     def run(self, dry=False, dump=False):
+        self.dry = dry
         folder = Path(self.FOLDER_PATH)
         datas = {}
         for file in (folder / 'games').glob('*.yaml'):
@@ -38,16 +46,15 @@ class Importer:
             print(json.dumps(datas, indent=2, cls=CustomJSONEncoder))
         for key, data in datas.items():
             try:
-                game = GameImporter().run(key, data)
-                if dry:
-                    continue
-                db.session.add(game)
-                db.session.commit()
-                log.info('Committed')
+                game = GameImporter(dry=self.dry).run(key, data)
+                self.commit(game)
             except Exception as e:
                 log.error(f'Failed while importing {data}')
                 log.error(e, exc_info=True)
                 db.session.rollback()
+
+    def __init__(self, dry=False):
+        self.dry = dry
 
 
 class VersionImporter(Importer):
@@ -89,6 +96,7 @@ class GameImporter(Importer):
         from app.main.models import Game, GameGroup
 
         result = db_ext.upsert(Game, key=key)
+        self.commit(result)
         self.update(result, 'name', data)
         self.update(result, 'active', data)
         self.update(result, 'group', data, GameGroup, 'name')
