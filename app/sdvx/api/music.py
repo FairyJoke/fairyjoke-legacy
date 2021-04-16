@@ -69,17 +69,20 @@ def get_jacket_pic(music_id, jacket_id, size='medium'):
     if not music:
         if is_strict():
             return 'Song not found', 404
+    dummy_path = '{}/graphics/jk_dummy{}.png'.format(
+        current_app.config['SDVX_PATH'],
+        size_repr[size],
+    )
     path = '{}/music/{}/jk_{}_{}{}.png'.format(
         current_app.config['SDVX_PATH'],
         music.get_music_folder(),
         str(music_id).zfill(4),
         jacket_id,
         size_repr[size]
-    ) if music else '{}/graphics/jk_dummy{}.png'.format(
-        current_app.config['SDVX_PATH'],
-        size_repr[size],
-    )
+    ) if music else dummy_path
     try:
         return send_file(path, mimetype='image/png')
     except FileNotFoundError:
+        if not is_strict():
+            return send_file(dummy_path, mimetype='image/png')
         return 'File not found', 404
