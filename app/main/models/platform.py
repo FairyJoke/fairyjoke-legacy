@@ -7,6 +7,10 @@ class Platform(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('platform.id'))
     parent = db.relationship('Platform')
 
+    @classmethod
+    def get_top_levels(cls):
+        return cls.query.filter(cls.parent == None).all()
+
     def dictify(self):
         return {
             'name': self.name,

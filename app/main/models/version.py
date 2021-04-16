@@ -8,6 +8,10 @@ class Version(db.Model):
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)
     game = db.relationship('Game', backref='versions')
 
+    @property
+    def start_date(self):
+        return min([x.start_date for x in self.releases if x.start_date], default=None)
+
     def dictify(self):
         return {
             'name': self.name,
