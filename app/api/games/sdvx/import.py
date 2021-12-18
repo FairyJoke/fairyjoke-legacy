@@ -4,7 +4,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 from app import db
-from app.games.sdvx.models import Music, Difficulty, Difficulties
+from app.api.games.sdvx.models import Music, Difficulty, Difficulties
 
 DB_FILE = Path(sys.argv[1])
 MUSIC_FOLDER = DB_FILE.parent / '..' / 'music'
