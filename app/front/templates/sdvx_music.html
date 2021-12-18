@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="row">
+	<h1><small>{{ music.artist }} - </small>{{ music.title }}</h1>
+	<ul class="collection">
+		<li class="collection-item">Genres: {{ music.genres|join(' ') }}</li>
+		<li class="collection-item">Added: {{ music.release_date }}</li>
+	</ul>
+	<div>
+		<a class="btn" href="https://remywiki.com/index.php?search={{ music.title }}">See on RemyWiki</a>
+	</div>
+</div>
+<div class="row sdvx-list">
+	{% for diff in music.difficulties %}
+	<div class="col s12 m6 l3">
+		<div class="card small">
+			<div class="card-image">
+				<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=diff.name.value) }}">
+			</div>
+			<div class="card-content">
+				<ul>
+					<li>{{ diff }}</li>
+					<li>Illustrated by {{ diff.illustrator }}</li>
+					<li>Effected by {{ diff.effector }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}

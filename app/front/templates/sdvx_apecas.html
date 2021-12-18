@@ -4,7 +4,7 @@
 {% block body %}
 
 {% include "_pager.html" %}
-<div class="row" id="sdvx-apecas">
+<div class="sdvx-list row" id="sdvx-apecas">
 	{% for apeca in pager.items %}
 	{% set url=url_for('get_apeca', apeca_id=apeca.id) %}
 	<div class="col s2 m3 l2">

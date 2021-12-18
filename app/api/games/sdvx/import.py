@@ -78,7 +78,14 @@ def parse_music_db(tree):
                 continue
             difficulty = db.create(
                 Difficulty,
-                {'music_id': music_id, 'name': Difficulties(diff.tag.upper())},
+                {
+                    'music_id': music_id,
+                    'name':
+                        Difficulties(diff.tag.upper())
+                        if diff.tag != 'infinite'
+                        else music.extra_difficulty
+                    ,
+                },
                 {
                     'level': level,
                     'illustrator': get(diff, 'illustrator'),

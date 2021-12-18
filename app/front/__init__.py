@@ -21,7 +21,7 @@ app.mount('/static', StaticFiles(directory=MODULE_DIR / 'static'), 'static')
 
 
 @router.get('/')
-async def index(req: Request):
+async def home(req: Request):
     return templates.render('index.html', req)
 
 from .routes import sdvx

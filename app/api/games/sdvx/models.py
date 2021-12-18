@@ -117,7 +117,7 @@ class Music(db.Base):
         return [
             value
             for key, value in GENRES.items()
-            if key & self.genre
+            if key & self.genre or key == self.genre
         ]
 
 
