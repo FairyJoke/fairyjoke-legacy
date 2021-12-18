@@ -1,5 +1,6 @@
 from pathlib import Path
 from fastapi import Request
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -19,10 +20,10 @@ templates = Jinja2Templates(TEMPLATES_DIR)
 router = Router(__name__, prefix=None)
 app.mount('/static', StaticFiles(directory=MODULE_DIR / 'static'), 'static')
 
-
-@router.get('/')
-async def home(req: Request):
-    return templates.render('index.html', req)
-
 from .routes import sdvx
 router.include_router(sdvx.router)
+
+
+@router.get('/')
+async def home():
+    return RedirectResponse(router.url_path_for('sdvx_musics'))
