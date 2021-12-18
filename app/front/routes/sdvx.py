@@ -29,8 +29,8 @@ async def sdvx_musics(
     if genre:
         genre_mask = functools.reduce(lambda a, b: a | b, genre)
         query = query.filter(
-            Music.genre.op('&')(genre_mask)
-            | (Music.genre == 0 if 0 in genre else Music.genre)
+            (Music.genre.op('&')(genre_mask) == genre_mask)
+            | (Music.genre == 0 if 0 in genre else Music.genre != None)
         )
     if text:
         query = query.filter(
