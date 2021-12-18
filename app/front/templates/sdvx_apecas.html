@@ -6,8 +6,8 @@
 <div class="sdvx-list row" id="sdvx-apecas">
 	{% for apeca in pager.items %}
 	{% set url=url_for('get_apeca', apeca_id=apeca.id) %}
-	<div class="col s2 m3 l2">
-		<div class="card small">
+	<div class="col s6 m4 l2">
+		<div class="card">
 			<div class="card-image">
 				<a href="{{ url }}"><img src="{{ url }}"></a>
 			</div>

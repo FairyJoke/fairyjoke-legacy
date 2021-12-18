@@ -1,66 +1,66 @@
 :root {
-								--nov: #BA55D3;
-								--adv: #FFEC4A;
-								--exh: #F03C30;
-								--mxm: #F5F5F5;
-								--inf: linear-gradient(to right, yellow,cyan,magenta);
-								--grv: #FF9E43;
-								--hvn: #7BDDFF;
-								--vvd: #FF4795;
+        --nov: #BA55D3;
+        --adv: #FFEC4A;
+        --exh: #F03C30;
+        --mxm: #F5F5F5;
+        --inf: linear-gradient(to right, yellow,cyan,magenta);
+        --grv: #FF9E43;
+        --hvn: #7BDDFF;
+        --vvd: #FF4795;
 
-								--critical: gold;
-								--near: gray;
-								--miss: darkred;
+        --critical: gold;
+        --near: gray;
+        --miss: darkred;
 }
 
 .row .col {
-								margin-right: auto;
+        margin-right: auto;
 }
 
 .section {
-								margin: 1em 0;
+        margin: 1em 0;
 }
 
 .dropdown-content.select-dropdown {
-								max-height: 500px;
+        max-height: 500px;
 }
 
 .sdvx-list {
-								display: flex;
-								flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
 }
 
 .sdvx-list .card {
-								height: calc(100% - 1em);
-								margin-bottom: 1em;
-								word-break: break-all;
+        height: calc(100% - 1em);
+        margin-bottom: 1em;
+        word-break: break-all;
 }
 
 .sdvx-list .card-content .card-title {
-								color: #000;
-								font-size: 120%;
-								line-height: initial;
+        color: #000;
+        font-size: 120%;
+        line-height: initial;
 }
 
 .sdvx-list .card-content {
-								font-size: 80%;
-								padding: .6em;
-								overflow: hidden scroll;
+        font-size: 80%;
+        padding: .6em;
+        overflow: hidden scroll;
 }
 
 .sdvx-list .card-image .difficulties {
-								padding: 0;
-								display: flex;
-								font-size: 1em;
+        padding: 0;
+        display: flex;
+        font-size: 1em;
 }
 
 .sdvx-list .diff {
-								border-radius: 50%;
-								height: 2em;
-								width: 2em;
-								line-height: 2em;
-								text-align: center;
-								margin: .5em;
+        border-radius: 50%;
+        height: 2em;
+        width: 2em;
+        line-height: 2em;
+        text-align: center;
+        margin: .5em;
 }
 
 .diff-NOV { background: var(--nov); }
