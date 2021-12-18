@@ -1,7 +1,9 @@
+#sdvx-apecas .card-title,
 #sdvx-musics .card-title {
 	font-size: 120%;
 }
 
+#sdvx-apecas .card-content,
 #sdvx-musics .card-content {
 	font-size: 80%;
 }

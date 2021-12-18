@@ -119,3 +119,21 @@ class Music(db.Base):
             for key, value in GENRES.items()
             if key & self.genre
         ]
+
+
+class Apeca(db.Base):
+    __table_prefix__ = router.short_prefix
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    title = sa.Column(sa.String)
+    texture = sa.Column(sa.String)
+    illustrator = sa.Column(sa.String)
+    rarity = sa.Column(sa.Integer)
+    sort = sa.Column(sa.Integer)
+    generator = sa.Column(sa.Integer)
+    genre = sa.Column(sa.Integer)
+    messages = sa.Column(sa.JSON)
+
+    # Skipped:
+    # distribution_date: u32, weird format, often 0
+    # limited

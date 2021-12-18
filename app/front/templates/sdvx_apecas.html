@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+
+{% block body %}
+
+{% include "_pager.html" %}
+<div class="row" id="sdvx-apecas">
+	{% for apeca in pager.items %}
+	{% set url=url_for('get_apeca', apeca_id=apeca.id) %}
+	<div class="col s2 m3 l2">
+		<div class="card small">
+			<div class="card-image">
+				<a href="{{ url }}"><img src="{{ url }}"></a>
+			</div>
+			<div class="card-content">
+				<div title="{{ apeca.title }}">
+					{{ apeca.title }}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% include "_pager.html" %}
+
+{% endblock %}

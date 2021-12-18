@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 
 from app import db, Schema
 from . import router, DATA_PATH
-from .models import Difficulties, Difficulty, Music
+from .models import Apeca, Difficulties, Difficulty, Music
 
 
 class DifficultySchema(Schema):
@@ -48,4 +48,11 @@ async def get_music(music_id: int):
 async def get_jacket(music_id: int, difficulty: Difficulties):
     diff = db.session.get(Difficulty, (music_id, difficulty))
     path = DATA_PATH / 'music' / diff.music.folder / diff.filename
+    return FileResponse(path)
+
+
+@router.get('/apecas/{apeca_id}.png')
+async def get_apeca(apeca_id: int):
+    apeca = db.session.get(Apeca, apeca_id)
+    path = DATA_PATH / 'graphics' / 'ap_card' / f'{apeca.texture}.png'
     return FileResponse(path)
