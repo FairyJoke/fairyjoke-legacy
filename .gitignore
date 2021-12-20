@@ -5,6 +5,7 @@
 *.db
 *.cfg
 /data/ddr_jackets
+*.xml
 
 # Config
 /.secretenv

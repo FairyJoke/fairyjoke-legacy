@@ -46,7 +46,7 @@ async def sdvx_get_music(music_id: int):
 
 @router.get('/musics/{music_id}/{difficulty}.png')
 async def sdvx_get_jacket(music_id: int, difficulty: Difficulties):
-    music = await sdvx_get_music(music_id)
+    music = db.session.get(Music, music_id)
     diff = next(filter(lambda x: x.diff == difficulty, music.difficulties))
     if diff.external_jacket:
         return RedirectResponse(diff.external_jacket)
