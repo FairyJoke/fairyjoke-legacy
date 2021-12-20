@@ -33,6 +33,7 @@ a,
 }
 
 .row .col {
+        margin-left: auto;
         margin-right: auto;
 }
 
@@ -67,26 +68,24 @@ a,
         overflow: hidden scroll;
 }
 
-.sdvx-list .card-image .difficulties {
-        padding: 0;
-        display: flex;
-        font-size: 1em;
+.sdvx-list .difficulties {
+        margin-bottom: 1em;
+        margin: auto;
 }
 
-.sdvx-list .diff {
-        border-radius: 50%;
+.diff {
+        border-radius: 2px;
         height: 2em;
-        width: 2em;
         line-height: 2em;
         text-align: center;
-        margin: .5em;
+        margin: 0 4px;
 }
 
-.diff-NOV { background: var(--nov); }
-.diff-ADV { background: var(--adv); color: #444; }
-.diff-EXH { background: var(--exh); }
-.diff-MXM { background: var(--mxm); color: #444; }
-.diff-INF { background: var(--inf); color: #444; }
-.diff-GRV { background: var(--grv); }
-.diff-HVN { background: var(--hvn); }
-.diff-VVD { background: var(--vvd); color: #444; }
+.sdvx-diff-NOV { background: var(--nov); }
+.sdvx-diff-ADV { background: var(--adv); color: #444; }
+.sdvx-diff-EXH { background: var(--exh); }
+.sdvx-diff-MXM { background: var(--mxm); color: #444; }
+.sdvx-diff-INF { background: var(--inf); color: #444; }
+.sdvx-diff-GRV { background: var(--grv); }
+.sdvx-diff-HVN { background: var(--hvn); }
+.sdvx-diff-VVD { background: var(--vvd); color: #444; }

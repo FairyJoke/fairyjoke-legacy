@@ -46,12 +46,14 @@
 					<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=music.difficulties[-1].diff.value) }}">
 				</a>
 				<div class="card-title difficulties">
-					{% for diff in music.difficulties %}
-					<div class="diff badge diff-{{ diff.diff }}">{{ diff.level }}</div>
-					{% endfor %}
 				</div>
 			</div>
 			<div class="card-content">
+				<div class="difficulties row card-content">
+					{% for diff in music.difficulties %}
+					<div class="diff col s3 sdvx-diff-{{ diff.diff }}">{{ diff.level }}</div>
+					{% endfor %}
+				</div>
 				<div class="card-title">
 					<div title="{{ music.title }}">
 						<a href="{{ url }}">{{ music.title }}</a>

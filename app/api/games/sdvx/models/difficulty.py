@@ -56,6 +56,10 @@ class Difficulty(db.IdMixin, db.Base):
     def name(self):
         return f'{self.diff} {self.level}'
 
+    @property
+    def full(self):
+        return f'{self.diff.value} {self.level}'
+
     def get_filename(self, jacket_id=False, size=None):
         jacket_id = jacket_id or self.jacket_id
         stem = f'jk_{str(self.music_id).zfill(4)}_{jacket_id}'
