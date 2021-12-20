@@ -1,7 +1,12 @@
+{% set title = music.title %}
+{% set section = 'SDVX' %}
 {% extends "base.html" %}
 
 {% block body %}
 
+<div class="section">
+	<a href="#!" onclick="history.back()">go back</a>
+</div>
 <div class="row">
 	<h1><small>{{ music.artist }} - </small>{{ music.title }}</h1>
 	<ul class="collection">
@@ -17,13 +22,14 @@
 	<div class="col s6 m4 l3">
 		<div class="card small">
 			<div class="card-image">
-				<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=diff.name.value) }}">
+				<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=diff.diff.value) }}">
 			</div>
 			<div class="card-content">
 				<ul>
-					<li>{{ diff }}</li>
+					<li>{{ diff.name }}</li>
 					<li>Illustrated by {{ diff.illustrator }}</li>
 					<li>Effected by {{ diff.effector }}</li>
+					<li>Confirmed in: {{ diff.games|join(', ') }}</li>
 				</ul>
 			</div>
 		</div>

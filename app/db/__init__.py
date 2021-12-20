@@ -13,7 +13,7 @@ meta = MetaData(naming_convention={
     'uq': 'uq_%(table_name)s_%(column_0_name)s',
     'ck': 'ck_%(table_name)s_%(column_0_name)s',
     'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
-    'pk': 'pk_%(table_name)s'
+    'pk': 'pk_%(table_name)s',
 })
 
 Base: Type = orm.declarative_base(cls=CustomBase, metadata=meta)
@@ -25,4 +25,5 @@ if not sa_utils.database_exists(engine.url):
     sa_utils.create_database(engine.url)
 
 from .actions import add, create
+from .mixins import IdMixin, ImportMixin
 from .pagination import paginate

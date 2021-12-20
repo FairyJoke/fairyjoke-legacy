@@ -3,11 +3,12 @@ from typing import Type
 from . import session
 
 
-def add(table, keys=None, commit=True, **kwargs):
+def add(table, keys=None, commit=True, **extra_keys):
     keys = keys or {}
-    keys |= kwargs
+    keys |= extra_keys
     result = table(**keys)
     session.add(result)
+    print('ADD', result) #TODO use stdlib logging
     if commit:
         session.commit()
     return result
@@ -20,10 +21,10 @@ def create(
     commit=True,
     include_search_in_create=True,
     update=False,
-    **kwargs,
+    **extra_search_keys,
 ) -> object:
     search_keys = search_keys or {}
-    search_keys |= kwargs
+    search_keys |= extra_search_keys
     result = session.query(table).filter_by(**search_keys).first()
     if not result:
         create_keys = create_keys or {}

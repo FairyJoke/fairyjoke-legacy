@@ -1,3 +1,5 @@
+{% set title = 'Musics' %}
+{% set section = 'SDVX' %}
 {% extends "base.html" %}
 
 {% block body %}
@@ -17,8 +19,8 @@
 		<div class="input-field col s6 m3">
 			<select multiple name="genre">
 				{% for genre in genres %}
-					<option value="{{ genre }}" {{ 'selected' if genre in search.genre }}>
-						{{ genres[genre] }}
+					<option value="{{ genre.name }}" {{ 'selected' if genre.name in search.genre }}>
+						{{ genre }}
 					</option>
 				{% endfor %}
 			</select>
@@ -36,30 +38,32 @@
 {% include "_pager.html" %}
 <div class="sdvx-list row" id="sdvx-musics">
 	{% for music in pager.items %}
+	{% set url = url_for('sdvx_music', music_id=music.id) %}
 	<div class="col m6 l3">
 		<div class="card">
 			<div class="card-image">
-				<a href="{{ url_for('sdvx_music', music_id=music.id) }}">
-					<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=music.difficulties[-1].name.value) }}">
+				<a href="{{ url }}">
+					<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=music.difficulties[-1].diff.value) }}">
 				</a>
 				<div class="card-title difficulties">
 					{% for diff in music.difficulties %}
-					<div class="diff badge diff-{{ diff.name }}">{{ diff.level }}</div>
+					<div class="diff badge diff-{{ diff.diff }}">{{ diff.level }}</div>
 					{% endfor %}
 				</div>
 			</div>
 			<div class="card-content">
 				<div class="card-title">
 					<div title="{{ music.title }}">
-						{{ music.title }}
+						<a href="{{ url }}">{{ music.title }}</a>
 					</div>
 					<div class="truncate" title="{{ music.artist }}">
-						<small>{{ music.artist }}</small>
+						<small><a href="?text={{ music.artist }}">{{ music.artist }}</a></small>
+						{# <small><a href="{{ url_for('sdvx_musics', text=music.artist) }}">{{ music.artist }}</a></small> #}
 					</div>
 				</div>
 				<div class="genres">
 					{% for genre in music.genres %}
-					<span class="genre">{{ genre }}</span>
+					<a href="?genre={{ genre }}" class="genre">{{ genre }}</a>
 					{% endfor %}
 				</div>
 				<div class="date">

@@ -1,6 +1,6 @@
 from datetime import date
 from typing import List
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 
 from app import db, Schema
 from . import router, DATA_PATH
@@ -47,6 +47,8 @@ async def get_music(music_id: int):
 @router.get('/musics/{music_id}/{difficulty}.png')
 async def get_jacket(music_id: int, difficulty: Difficulties):
     diff = db.session.get(Difficulty, (music_id, difficulty))
+    if diff.external_jacket:
+        return RedirectResponse(diff.external_jacket)
     path = DATA_PATH / 'music' / diff.music.folder / diff.filename
     return FileResponse(path)
 

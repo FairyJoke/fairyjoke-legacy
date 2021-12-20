@@ -22,3 +22,5 @@ from app import api, front
 
 app.include_router(api.router)
 app.include_router(front.router)
+
+from app import models

@@ -20,6 +20,8 @@ templates = Jinja2Templates(TEMPLATES_DIR)
 router = Router(__name__, prefix=None)
 app.mount('/static', StaticFiles(directory=MODULE_DIR / 'static'), 'static')
 
+from .routes import games
+router.include_router(games.router)
 from .routes import sdvx
 router.include_router(sdvx.router)
 

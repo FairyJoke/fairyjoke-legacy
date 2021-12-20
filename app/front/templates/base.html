@@ -7,6 +7,15 @@
 		<link rel="icon" href="{{ url_for('static', path='/favicon.png') }}">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>
+		{% if title %}
+			FairyJoke /
+			{% if section %}{{ section }} /{% endif %}
+			{{ title }}
+		{% else %}
+		FairyJoke, the rhythm games database
+		{% endif %}
+		</title>
 	</head>
 
 	<body>
@@ -19,6 +28,7 @@
 			<div class="nav-wrapper container">
 				<a href="{{ url_for('home') }}" class="brand-logo left">FairyJoke</a>
 				<ul class="right">
+					<li><a href="{{ url_for('games') }}">Games</a></li>
 					<li><a class="dropdown-trigger" href="#!" data-target="dropdown-sdvx">SDVX<i class="material-icons right">arrow_drop_down</i></a></li>
 				</ul>
 			</div>
