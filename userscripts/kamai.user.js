@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name      FairyJoke Jackets on Kamai
 // @version   1
-// @updateURL https://github.com/Tina-otoge/FairyJokeAPI/raw/userscripts-test/userscripts/kamai.user.js
+// @updateURL https://github.com/Tina-otoge/FairyJokeAPI/raw/master/userscripts/kamai.user.js
 // @include   https://kamaitachi.xyz/*
 // ==/UserScript==
 
