@@ -28,11 +28,11 @@ class Difficulties(enum.Enum):
         return self.name
 
 
-class Difficulty(db.Base):
+class Difficulty(db.IdMixin, db.Base):
     __table_prefix__ = router.short_prefix
 
-    music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'), nullable=False, primary_key=True)
-    diff = sa.Column('name', sa.Enum(Difficulties), primary_key=True)
+    music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'))
+    diff = sa.Column('name', sa.Enum(Difficulties))
     level = sa.Column(sa.Integer)
     illustrator = sa.Column(sa.String)
     effector = sa.Column(sa.String)
@@ -69,12 +69,14 @@ class Difficulty(db.Base):
 
     @property
     def games(self):
-        imports = db.session.query(DifficultyImport).filter_by(music_id=self.music_id, difficulty_name=self.diff)
-        return {x.batch.version.game for x in imports}
+        return {x.batch.version.game for x in self.imports}
+
+    imports = orm.relationship('DifficultyImport')
 
 
 class DifficultyImport(db.ImportMixin, db.Base):
     __table_prefix__ = router.short_prefix
 
-    music_id = sa.Column(sa.ForeignKey('sdvx_difficulties.music_id'))
-    difficulty_name = sa.Column(sa.ForeignKey('sdvx_difficulties.name'))
+    difficulty_id = sa.Column(sa.ForeignKey('sdvx_difficulties.id'))
+
+    difficulty = orm.relationship('Difficulty', back_populates='imports')

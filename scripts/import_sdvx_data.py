@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 sys.path.append(str(Path('.').resolve()))
 
 from app import db
-from app.models import Version, ImportBatch
+from app.models import Version, ImportBatch, Series, Game
 from app.api.games.sdvx.models import (
     Apeca, Music, Difficulty, Difficulties, DifficultyImport, ApecaImport
 )
@@ -107,7 +107,7 @@ def parse_music_db(tree, batch):
                     jacket_id = this_jacket
                 difficulty.jacket_id = jacket_id
                 difficulty.has_internal_jacket = True
-            db.add(DifficultyImport, batch=batch, difficulty_name=difficulty.diff, music_id=difficulty.music_id, commit=False)
+            db.add(DifficultyImport, batch=batch, difficulty=difficulty, commit=False)
 
 
 def parse_apecas(tree, batch):
@@ -154,7 +154,8 @@ if __name__ == '__main__':
             break
     else:
         datecode = sys.argv[3]
-    version = db.create(Version, name=datecode, game_short=game_name, series_short='sdvx')
+    series = db.create(Series, short='sdvx')
+    version = db.create(Version, name=datecode, game=db.create(Game, short=game_name, series=series))
     batch = db.add(ImportBatch, version=version, commit=False)
     fun(tree, batch)
     db.session.commit()

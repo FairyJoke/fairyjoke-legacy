@@ -41,11 +41,11 @@ class Genres(enum.Enum):
         return self.stringify(self.name)
 
 
-class MusicGenre(db.Base):
+class MusicGenre(db.IdMixin, db.Base):
     __table_prefix__ = router.short_prefix
 
-    music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'), primary_key=True)
-    genre = sa.Column(sa.Enum(Genres), primary_key=True)
+    music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'))
+    genre = sa.Column(sa.Enum(Genres))
 
     music = orm.relationship('Music', back_populates='music_genres')
 
@@ -75,8 +75,11 @@ class Music(db.Base):
 
     def __init__(self, genre_mask=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for genre in Genres.from_mask(genre_mask):
-            db.add(MusicGenre, music_id=self.id, genre=genre)
+        if genre_mask:
+            self.music_genres = [
+                MusicGenre(music=self, genre=genre)
+                for genre in Genres.from_mask(genre_mask)
+            ]
 
     def __str__(self):
         return f'{self.artist} - {self.title}'

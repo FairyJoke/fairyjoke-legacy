@@ -16,10 +16,10 @@ class Series(db.Base):
         return self.name
 
 
-class Game(db.Base):
+class Game(db.IdMixin, db.Base):
     name = sa.Column(sa.String)
-    short = sa.Column(sa.String, primary_key=True)
-    series_short = sa.Column('series', sa.ForeignKey('series.short'), primary_key=True)
+    short = sa.Column(sa.String, unique=True)
+    series_short = sa.Column('series', sa.ForeignKey('series.short'))
     sort = sa.Column(sa.Integer)
 
     series = orm.relationship('Series', back_populates='games')
@@ -31,7 +31,6 @@ class Game(db.Base):
 
 class Version(db.IdMixin, db.Base):
     name = sa.Column(sa.String)
-    game_short = sa.Column('game', sa.ForeignKey('games.short'))
-    series_short = sa.Column('series', sa.ForeignKey('series.short'))
+    game_id = sa.Column(sa.ForeignKey('games.id'))
 
     game = orm.relationship('Game', back_populates='versions')
