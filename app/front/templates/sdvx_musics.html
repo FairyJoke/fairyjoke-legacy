@@ -51,7 +51,7 @@
 			<div class="card-content">
 				<div class="difficulties row card-content">
 					{% for diff in music.difficulties %}
-					<div class="diff col s3 sdvx-diff-{{ diff.diff }}">{{ diff.level }}</div>
+					<div title="{{ diff.full }}" class="diff col s3 sdvx-diff-{{ diff.diff }}">{{ diff.level }}</div>
 					{% endfor %}
 				</div>
 				<div class="card-title">
