@@ -1,10 +1,16 @@
+#!/usr/bin/env python3
 from datetime import date
 from pathlib import Path
 import sys
 import xml.etree.ElementTree as ET
 
+sys.path.append(str(Path('.').resolve()))
+
 from app import db
-from app.api.games.sdvx.models import Apeca, Music, Difficulty, Difficulties
+from app.models import Version, ImportBatch
+from app.api.games.sdvx.models import (
+    Apeca, Music, Difficulty, Difficulties, DifficultyImport, ApecaImport
+)
 
 target = Path(sys.argv[1])
 MUSIC_FOLDER = target.parent / '..' / 'music'
@@ -46,7 +52,7 @@ def diffify(x: str):
         '5': Difficulties.VVD,
     }.get(x)
 
-def parse_music_db(tree):
+def parse_music_db(tree, batch):
     for tag in tree:
         info: ET.Element = tag.find('info')
         music_id = get(tag, 'id', int)
@@ -64,7 +70,7 @@ def parse_music_db(tree):
                 'bpm_max':          get(info, 'bpm_max', bpmify),
                 'release_date':     get(info, 'distribution_date', dateify),
                 'background_type':  get(info, 'bg_no', int),
-                'genre':            get(info, 'genre', int),
+                'genre_mask':       get(info, 'genre', int),
                 'extra_difficulty': get(info, 'inf_ver', diffify),
             },
             commit=False,
@@ -100,13 +106,15 @@ def parse_music_db(tree):
                 if (folder / difficulty.get_filename(jacket_id=this_jacket)).exists():
                     jacket_id = this_jacket
                 difficulty.jacket_id = jacket_id
+                difficulty.has_internal_jacket = True
+            db.add(DifficultyImport, batch=batch, difficulty_name=difficulty.name, music_id=difficulty.music_id, commit=False)
 
 
-def parse_apecas(tree):
+def parse_apecas(tree, batch):
     for tag in tree:
         info: ET.Element = tag.find('info')
         card_id = get(tag, 'id', int)
-        db.create(
+        apeca = db.create(
             Apeca,
             {'id': card_id},
             {
@@ -125,6 +133,7 @@ def parse_apecas(tree):
             commit=False,
             update=True,
         )
+        db.add(ApecaImport, batch=batch, apeca=apeca, commit=False)
 
 
 if __name__ == '__main__':
@@ -137,5 +146,15 @@ if __name__ == '__main__':
     }.get(target.stem)
     if not fun:
         raise Exception('Unsupported')
-    fun(tree)
+
+    game_name = sys.argv[2]
+    for folder in target.parents:
+        if folder.stem.startswith('KFC-'):
+            datecode = folder.stem
+            break
+    else:
+        datecode = sys.argv[3]
+    version = db.create(Version, name=datecode, game_short=game_name, series_short='sdvx')
+    batch = db.add(ImportBatch, version=version, commit=False)
+    fun(tree, batch)
     db.session.commit()

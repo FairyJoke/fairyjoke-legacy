@@ -1,4 +1,5 @@
 from typing import Type
+import sqlalchemy as sa
 from sqlalchemy import orm
 
 
@@ -9,6 +10,10 @@ def camel_to_snake(s: str) -> str:
 
 
 def pluralize(s: str) -> str:
+    if s.endswith('s'):
+        return s
+    if s.endswith('h'):
+        return s + 'es'
     if s.endswith('y'):
         return s[:-1] + 'ies'
     return s + 's'
@@ -25,8 +30,22 @@ class Base:
         - UserSetting -> user_settings
         - Country -> countries
         """
-        name = camel_to_snake(cls.__name__)
+        name = cls.__name__.removesuffix('Table')
+        name = camel_to_snake(name)
         name = pluralize(name)
         if hasattr(cls, '__table_prefix__'):
             name = f'{cls.__table_prefix__}_{name}'
         return name
+
+
+    def __repr__(self):
+        # From https://github.com/pallets/flask-sqlalchemy/blob/main/src/flask_sqlalchemy/model.py
+
+        identity = sa.inspect(self).identity
+
+        if identity is None:
+            pk = f"(transient {id(self)})"
+        else:
+            pk = ", ".join(str(value) for value in identity)
+
+        return f"<{type(self).__name__} {pk}>"

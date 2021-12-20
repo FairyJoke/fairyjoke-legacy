@@ -47,7 +47,10 @@ async def get_music(music_id: int):
 @router.get('/musics/{music_id}/{difficulty}.png')
 async def get_jacket(music_id: int, difficulty: Difficulties):
     diff = db.session.get(Difficulty, (music_id, difficulty))
-    path = DATA_PATH / 'music' / diff.music.folder / diff.filename
+    path = (
+        diff.external_jacket
+        or DATA_PATH / 'music' / diff.music.folder / diff.filename
+    )
     return FileResponse(path)
 
 
