@@ -71,7 +71,7 @@ a,
 .cards .card-content {
         font-size: 80%;
         padding: .6em;
-        overflow: hidden scroll;
+        overflow-x: hidden;
 }
 
 .cards .difficulties {
