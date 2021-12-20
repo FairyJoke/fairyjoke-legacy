@@ -42,7 +42,7 @@ async def sdvx_musics(
             | Difficulty.illustrator.ilike(f'%{text}%')
             | Difficulty.effector.ilike(f'%{text}%')
         )
-    query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query))
+    query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query)).order_by(Music.id)
     pager = db.paginate(query, page)
     return templates.render(
         'sdvx_musics.html', req,
