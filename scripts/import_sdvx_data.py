@@ -102,7 +102,7 @@ def parse_music_db(tree, batch):
             )
             if MUSIC_FOLDER:
                 folder = MUSIC_FOLDER / music.folder
-                this_jacket = int(difficulty.name)
+                this_jacket = int(difficulty.diff)
                 if (folder / difficulty.get_filename(jacket_id=this_jacket)).exists():
                     jacket_id = this_jacket
                 difficulty.jacket_id = jacket_id
