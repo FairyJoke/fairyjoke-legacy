@@ -1,4 +1,8 @@
 :root {
+        --accent: #e91e63;
+        --accent-lighter: #f06292;
+
+
         --nov: #BA55D3;
         --adv: #FFEC4A;
         --exh: #F03C30;
@@ -11,6 +15,21 @@
         --critical: gold;
         --near: gray;
         --miss: darkred;
+}
+
+nav,
+.btn {
+        background: var(--accent);
+}
+
+.btn:hover {
+        background: var(--accent-lighter);
+}
+
+a,
+.dropdown-content li > a
+{
+        color: var(--accent);
 }
 
 .row .col {

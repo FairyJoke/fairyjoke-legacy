@@ -32,7 +32,7 @@ class Difficulty(db.Base):
     __table_prefix__ = router.short_prefix
 
     music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'), nullable=False, primary_key=True)
-    name = sa.Column(sa.Enum(Difficulties), primary_key=True)
+    diff = sa.Column('name', sa.Enum(Difficulties), primary_key=True)
     level = sa.Column(sa.Integer)
     illustrator = sa.Column(sa.String)
     effector = sa.Column(sa.String)
@@ -50,7 +50,11 @@ class Difficulty(db.Base):
     external_jacket = sa.Column(sa.String)
 
     def __str__(self):
-        return f'{self.name}{self.level}'
+        return f'{self.music} [{self.name}]'
+
+    @property
+    def name(self):
+        return f'{self.diff} {self.level}'
 
     def get_filename(self, jacket_id=False, size=None):
         jacket_id = jacket_id or self.jacket_id
@@ -65,7 +69,7 @@ class Difficulty(db.Base):
 
     @property
     def games(self):
-        imports = db.session.query(DifficultyImport).filter_by(music_id=self.music_id, difficulty_name=self.name)
+        imports = db.session.query(DifficultyImport).filter_by(music_id=self.music_id, difficulty_name=self.diff)
         return {x.batch.version.game for x in imports}
 
 

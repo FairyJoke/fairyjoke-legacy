@@ -75,8 +75,11 @@ class Music(db.Base):
 
     def __init__(self, genre_mask=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for genre in Genres.get(genre_mask):
+        for genre in Genres.from_mask(genre_mask):
             db.add(MusicGenre, music_id=self.id, genre=genre)
+
+    def __str__(self):
+        return f'{self.artist} - {self.title}'
 
     @property
     def bpm(self):

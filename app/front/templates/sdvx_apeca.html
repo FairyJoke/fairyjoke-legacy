@@ -1,3 +1,5 @@
+{% set title = apeca.title %}
+{% set section = 'SDVX' %}
 {% extends "base.html" %}
 
 {% block body %}
@@ -18,7 +20,7 @@
 		{% for letter in apeca.messages %}
 		<li class="collection-item">Message {{ letter }}: {{ apeca.messages[letter] }}</li>
 		{% endfor %}
-		<li class="collection-item">Found in: {{ apeca.games|join(', ') }}</li>
+		<li class="collection-item">Confirmed in: {{ apeca.games|join(', ') }}</li>
 	</ul>
 </div>
 

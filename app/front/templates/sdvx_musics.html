@@ -1,3 +1,5 @@
+{% set title = 'Musics' %}
+{% set section = 'SDVX' %}
 {% extends "base.html" %}
 
 {% block body %}
@@ -41,11 +43,11 @@
 		<div class="card">
 			<div class="card-image">
 				<a href="{{ url }}">
-					<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=music.difficulties[-1].name.value) }}">
+					<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=music.difficulties[-1].diff.value) }}">
 				</a>
 				<div class="card-title difficulties">
 					{% for diff in music.difficulties %}
-					<div class="diff badge diff-{{ diff.name }}">{{ diff.level }}</div>
+					<div class="diff badge diff-{{ diff.diff }}">{{ diff.level }}</div>
 					{% endfor %}
 				</div>
 			</div>

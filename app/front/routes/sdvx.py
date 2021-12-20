@@ -1,5 +1,6 @@
 from typing import List, Optional
 from fastapi import Request, Query
+from fastapi.responses import RedirectResponse
 
 from app import Router, Schema, db
 from app.api.games.sdvx.models import Apeca, Difficulty, Music, MusicGenre, Genres
@@ -13,6 +14,11 @@ class SearchSchema(Schema):
     level: Optional[List[int]]
     genre: Optional[List[int]]
     text: Optional[str]
+
+
+@router.get('/')
+async def sdvx_index():
+    return RedirectResponse(router.url_path_for('sdvx_musics'))
 
 
 @router.get('/musics')

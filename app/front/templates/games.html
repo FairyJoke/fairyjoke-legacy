@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<h1>Games</h1>
+
+{% for series in series %}
+
+<div class="section">
+	<h2>
+		{% if series.has_api %}
+		<a href="{{ url_for(series.short + '_index') }}">
+			{{ series }} series
+		</a>
+		{% else %}
+		{{ series }} series
+		{% endif %}
+	</h2>
+		{% for game in series.games %}
+		<ul>
+			<li>{{ game }}</li>
+		</ul>
+		{% endfor %}
+	
+</div>
+
+
+{% endfor %}
+
+
+{% endblock %}
+

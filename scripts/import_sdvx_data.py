@@ -86,7 +86,7 @@ def parse_music_db(tree, batch):
                 Difficulty,
                 {
                     'music_id': music_id,
-                    'name':
+                    'diff':
                         Difficulties(diff.tag.upper())
                         if diff.tag != 'infinite'
                         else music.extra_difficulty
@@ -107,7 +107,7 @@ def parse_music_db(tree, batch):
                     jacket_id = this_jacket
                 difficulty.jacket_id = jacket_id
                 difficulty.has_internal_jacket = True
-            db.add(DifficultyImport, batch=batch, difficulty_name=difficulty.name, music_id=difficulty.music_id, commit=False)
+            db.add(DifficultyImport, batch=batch, difficulty_name=difficulty.diff, music_id=difficulty.music_id, commit=False)
 
 
 def parse_apecas(tree, batch):

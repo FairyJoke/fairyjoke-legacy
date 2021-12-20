@@ -18,11 +18,15 @@ for series_short, series_info in data.items():
     series = db.create(
         Series,
         short=series_short,
-        create_keys={'name': series_info['name']}
+        create_keys={'name': series_info['name'], 'has_api': series_info['api']}
     )
-    for game_short, game_name in series_info['games'].items():
+    for i, (game_short, game_name) in enumerate(series_info['games'].items()):
         game = db.create(
             Game,
             short=game_short,
-            create_keys={'name': game_name, 'series_short': series_short},
+            create_keys={
+                'name': game_name,
+                'series_short': series_short,
+                'sort': i,
+            },
         )
