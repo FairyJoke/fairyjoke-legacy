@@ -131,7 +131,6 @@ def parse_apecas(tree, batch):
                 },
             },
             commit=False,
-            update=True,
         )
         db.add(ApecaImport, batch=batch, apeca=apeca, commit=False)
 
