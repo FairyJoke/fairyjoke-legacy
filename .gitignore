@@ -4,6 +4,7 @@
 /import
 *.db
 *.cfg
+/data/ddr_jackets
 
 # Config
 /.secretenv

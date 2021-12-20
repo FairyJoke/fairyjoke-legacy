@@ -4,9 +4,16 @@ from sqlalchemy import orm
 
 
 def camel_to_snake(s: str) -> str:
-    return ''.join([
-        f'_{c.lower()}' if c.isupper() else c for c in s
-    ]).lstrip('_')
+    result = ''
+    for i, c in enumerate(s):
+        r = c.lower()
+        if not c.isupper():
+            result += r
+            continue
+        if i > 0 and (not s[i - 1].isupper() or (i + 1 < len(s) and not s[i + 1].isupper())):
+            result += '_'
+        result += r
+    return result
 
 
 def pluralize(s: str) -> str:

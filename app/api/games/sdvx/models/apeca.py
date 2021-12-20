@@ -2,13 +2,9 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 
 from app import db
-from .. import router
 
 
-
-class Apeca(db.Base):
-    __table_prefix__ = router.short_prefix
-
+class SDVXApeca(db.Base):
     id = sa.Column(sa.Integer, primary_key=True)
     title = sa.Column(sa.String)
     texture = sa.Column(sa.String)
@@ -28,9 +24,7 @@ class Apeca(db.Base):
         return {x.batch.version.game for x in self.imports}
 
 
-class ApecaImport(db.ImportMixin, db.Base):
-    __table_prefix__ = router.short_prefix
-
+class SDVXApecaImport(db.ImportMixin, db.Base):
     apeca_id = sa.Column(sa.ForeignKey('sdvx_apecas.id'))
 
-    apeca = orm.relationship('Apeca', backref='imports')
+    apeca = orm.relationship('SDVXApeca', backref='imports')

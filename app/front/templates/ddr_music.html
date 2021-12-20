@@ -1,0 +1,49 @@
+{% set title = music.title %}
+{% set section = 'DDR' %}
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="section">
+	<a href="#!" onclick="history.back()">go back</a>
+</div>
+<div class="row">
+	<h1><small><a href="{{ url_for('ddr_musics') }}?artist={{ music.artist }}">{{ music.artist }}</a> - </small>{{ music.title }}</h1>
+	<div>
+		<img src="{{ url_for('ddr_get_jacket', music_id=music.id) }}">
+	</div>
+	{% if music.game %}
+	<ul class="collection">
+		<li class="collection-item">From {{ music.game }}</li>
+	</ul>
+	{% endif %}
+	<div>
+		<a class="btn" href="https://remywiki.com/index.php?search={{ music.title }}">See on RemyWiki</a>
+		<a class="btn" href="{{ url_for('ddr_get_music', music_id=music.id) }}">
+			<i class="material-icons left">link</i> API Link
+		</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col s6">
+		{% for diff in music.fixed_difficulties['SP'] %}
+		{% if diff %}
+		<div class="diff ddr-diff-{{ diff.diff.short }}">{{ diff.full }}</div>
+		{% else %}
+		<div class="diff none"></div>
+		{% endif %}
+		{% endfor %}
+	</div>
+	<div class="col s6">
+		{% for diff in music.fixed_difficulties['DP'] %}
+		{% if diff %}
+		<div class="diff ddr-diff-{{ diff.diff.short }}">{{ diff.full }}</div>
+		{% else %}
+		<div class="diff none"></div>
+		{% endif %}
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}
+

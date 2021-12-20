@@ -19,17 +19,18 @@
 	</head>
 
 	<body>
-		<ul id="dropdown-sdvx" class="dropdown-content">
-			<li><a href="{{ url_for('sdvx_musics') }}">Musics</a></li>
-			<li><a href="{{ url_for('sdvx_apecas') }}">Apecas</a></li>
+		<ul id="dropdown-games" class="dropdown-content">
+			<li><a href="{{ url_for('games') }}">Games</a></li>
+			<li><a href="{{ url_for('ddr_musics') }}">DDR Musics</a></li>
+			<li><a href="{{ url_for('sdvx_musics') }}">SDVX Musics</a></li>
+			<li><a href="{{ url_for('sdvx_apecas') }}">SDVX Apecas</a></li>
 		</ul>
 
 		<nav>
 			<div class="nav-wrapper container">
 				<a href="{{ url_for('home') }}" class="brand-logo left">FairyJoke</a>
 				<ul class="right">
-					<li><a href="{{ url_for('games') }}">Games</a></li>
-					<li><a class="dropdown-trigger" href="#!" data-target="dropdown-sdvx">SDVX<i class="material-icons right">arrow_drop_down</i></a></li>
+					<li><a class="dropdown-trigger" href="#!" data-target="dropdown-games">Games<i class="material-icons right">arrow_drop_down</i></a></li>
 				</ul>
 			</div>
 		</nav>

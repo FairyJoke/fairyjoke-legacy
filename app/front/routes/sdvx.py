@@ -27,6 +27,7 @@ async def sdvx_musics(
     level: List[int] = Query([]),
     genre: List[str] = Query([]),
     text: str = Query(''),
+    artist: str = Query(''),
 ):
     query = db.session.query(Difficulty).join(Music)
     if level:
@@ -35,14 +36,19 @@ async def sdvx_musics(
         genres = [Genres[x] for x in genre]
         query = query.filter(Music.music_genres.any(MusicGenre.genre.in_(genres)))
     if text:
+        text = text.strip()
         query = query.filter(
             Music.title.ilike(f'%{text}%')
+            | Music.title_yomigana.ilike(f'%{text}%')
             | Music.artist.ilike(f'%{text}%')
             | Music.ascii.ilike(f'%{text}%')
             | Difficulty.illustrator.ilike(f'%{text}%')
             | Difficulty.effector.ilike(f'%{text}%')
         )
-    query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query)).order_by(Music.id)
+    if artist:
+        query = query.filter(Music.artist == artist)
+    query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query))
+    query = query.order_by(Music.id)
     pager = db.paginate(query, page)
     return templates.render(
         'sdvx_musics.html', req,

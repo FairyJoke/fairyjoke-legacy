@@ -3,9 +3,9 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 
 from app import db
-from .. import router
 
-class Difficulties(enum.Enum):
+
+class SDVXDifficulties(enum.Enum):
     NOV = 'NOVICE'
     ADV = 'ADVANCED'
     EXH = 'EXHAUST'
@@ -28,11 +28,9 @@ class Difficulties(enum.Enum):
         return self.name
 
 
-class Difficulty(db.IdMixin, db.Base):
-    __table_prefix__ = router.short_prefix
-
+class SDVXDifficulty(db.IdMixin, db.Base):
     music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'))
-    diff = sa.Column('name', sa.Enum(Difficulties))
+    diff = sa.Column('name', sa.Enum(SDVXDifficulties))
     level = sa.Column(sa.Integer)
     illustrator = sa.Column(sa.String)
     effector = sa.Column(sa.String)
@@ -44,7 +42,7 @@ class Difficulty(db.IdMixin, db.Base):
     # jacket_print: s32, idk
     # jacket_mask: s32, idk
 
-    music = orm.relationship('Music', back_populates='difficulties')
+    music = orm.relationship('SDVXMusic', back_populates='difficulties')
 
     has_internal_jacket = sa.Column(sa.Boolean)
     external_jacket = sa.Column(sa.String)
@@ -75,12 +73,10 @@ class Difficulty(db.IdMixin, db.Base):
     def games(self):
         return {x.batch.version.game for x in self.imports}
 
-    imports = orm.relationship('DifficultyImport')
+    imports = orm.relationship('SDVXDifficultyImport')
 
 
-class DifficultyImport(db.ImportMixin, db.Base):
-    __table_prefix__ = router.short_prefix
-
+class SDVXDifficultyImport(db.ImportMixin, db.Base):
     difficulty_id = sa.Column(sa.ForeignKey('sdvx_difficulties.id'))
 
-    difficulty = orm.relationship('Difficulty', back_populates='imports')
+    difficulty = orm.relationship('SDVXDifficulty', back_populates='imports')

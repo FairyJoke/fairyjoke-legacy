@@ -3,11 +3,10 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 
 from app import db
-from .difficulty import Difficulties, Difficulty
-from .. import router
+from .difficulty import SDVXDifficulties, SDVXDifficulty
 
 
-class Genres(enum.Enum):
+class SDVXGenres(enum.Enum):
     Other = 0
     EXIT_TUNES = 1
     FLOOR = 2
@@ -41,18 +40,14 @@ class Genres(enum.Enum):
         return self.stringify(self.name)
 
 
-class MusicGenre(db.IdMixin, db.Base):
-    __table_prefix__ = router.short_prefix
-
+class SDVXMusicGenre(db.IdMixin, db.Base):
     music_id = sa.Column(sa.ForeignKey('sdvx_musics.id'))
-    genre = sa.Column(sa.Enum(Genres))
+    genre = sa.Column(sa.Enum(SDVXGenres))
 
-    music = orm.relationship('Music', back_populates='music_genres')
+    music = orm.relationship('SDVXMusic', back_populates='music_genres')
 
 
-class Music(db.Base):
-    __table_prefix__ = router.short_prefix
-
+class SDVXMusic(db.BpmMixin, db.Base):
     id = sa.Column(sa.Integer, primary_key=True)
     label = sa.Column(sa.String, unique=True)
     title = sa.Column(sa.String)
@@ -60,39 +55,27 @@ class Music(db.Base):
     artist = sa.Column(sa.String)
     artist_yomigana = sa.Column(sa.String)
     ascii = sa.Column(sa.String)
-    bpm_min = sa.Column(sa.Float)
-    bpm_max = sa.Column(sa.Float)
     release_date = sa.Column(sa.Date)
     background_type = sa.Column(sa.Integer)
-    extra_difficulty = sa.Column(sa.Enum(Difficulties))
+    extra_difficulty = sa.Column(sa.Enum(SDVXDifficulties))
 
     # Skipped:
     # volume: u16, all "91"
     # is_fixed: u8, all "1"
 
-    difficulties = orm.relationship('Difficulty', order_by=Difficulty.level, cascade="all, delete-orphan")
-    music_genres = orm.relationship('MusicGenre', order_by=MusicGenre.genre, cascade="all, delete-orphan")
+    difficulties = orm.relationship('SDVXDifficulty', order_by=SDVXDifficulty.level, cascade="all, delete-orphan")
+    music_genres = orm.relationship('SDVXMusicGenre', order_by=SDVXMusicGenre.genre, cascade="all, delete-orphan")
 
     def __init__(self, genre_mask=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if genre_mask:
             self.music_genres = [
-                MusicGenre(music=self, genre=genre)
-                for genre in Genres.from_mask(genre_mask)
+                SDVXMusicGenre(music=self, genre=genre)
+                for genre in SDVXGenres.from_mask(genre_mask)
             ]
 
     def __str__(self):
         return f'{self.artist} - {self.title}'
-
-    @property
-    def bpm(self):
-        bpm_min, bpm_max = map(
-            lambda x: '{:g}'.format(x),
-            (self.bpm_min, self.bpm_max),
-        )
-        if bpm_min == bpm_max:
-            return str(bpm_min)
-        return f'{bpm_min}-{bpm_max}'
 
     @property
     def folder(self):

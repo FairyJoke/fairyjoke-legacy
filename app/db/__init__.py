@@ -25,5 +25,5 @@ if not sa_utils.database_exists(engine.url):
     sa_utils.create_database(engine.url)
 
 from .actions import add, create
-from .mixins import IdMixin, ImportMixin
+from .mixins import IdMixin, ImportMixin, BpmMixin
 from .pagination import paginate

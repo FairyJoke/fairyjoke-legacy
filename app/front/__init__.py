@@ -1,3 +1,4 @@
+import importlib
 from pathlib import Path
 from fastapi import Request
 from fastapi.responses import RedirectResponse
@@ -20,12 +21,14 @@ templates = Jinja2Templates(TEMPLATES_DIR)
 router = Router(__name__, prefix=None)
 app.mount('/static', StaticFiles(directory=MODULE_DIR / 'static'), 'static')
 
-from .routes import games
-router.include_router(games.router)
-from .routes import sdvx
-router.include_router(sdvx.router)
+for file in Path(__file__).parent.glob('./routes/*'):
+    if file.stem.startswith('_'):
+        continue
+    module = importlib.import_module(f'{__name__}.routes.{file.stem}')
+    if hasattr(module, 'router'):
+        router.include_router(module.router)
 
 
 @router.get('/')
 async def home():
-    return RedirectResponse(router.url_path_for('sdvx_musics'))
+    return RedirectResponse(router.url_path_for('games'))

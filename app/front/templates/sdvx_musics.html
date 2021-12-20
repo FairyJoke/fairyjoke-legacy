@@ -8,7 +8,7 @@
 	<form method="get" action="{{ url_for('sdvx_musics') }}">
 		<div class="input-field col s6 m2">
 			<select multiple name="level">
-				{% for i in range(1, 21)|reverse %}
+				{% for i in range(1, 20 + 1)|reverse %}
 					<option value="{{ i }}" {{ 'selected' if i in search.level }}>
 						{{ i }}
 					</option>
@@ -36,14 +36,14 @@
 	</form>
 </div>
 {% include "_pager.html" %}
-<div class="sdvx-list row" id="sdvx-musics">
+<div class="cards row" id="sdvx-musics">
 	{% for music in pager.items %}
 	{% set url = url_for('sdvx_music', music_id=music.id) %}
 	<div class="col m6 l3">
 		<div class="card">
 			<div class="card-image">
 				<a href="{{ url }}">
-					<img src="{{ url_for('get_jacket', music_id=music.id, difficulty=music.difficulties[-1].diff.value) }}">
+					<img src="{{ url_for('sdvx_get_jacket', music_id=music.id, difficulty=music.difficulties[-1].diff.value) }}">
 				</a>
 				<div class="card-title difficulties">
 				</div>
@@ -59,9 +59,11 @@
 						<a href="{{ url }}">{{ music.title }}</a>
 					</div>
 					<div class="truncate" title="{{ music.artist }}">
-						<small><a href="?text={{ music.artist }}">{{ music.artist }}</a></small>
-						{# <small><a href="{{ url_for('sdvx_musics', text=music.artist) }}">{{ music.artist }}</a></small> #}
+						<small><a href="?artist={{ music.artist }}">{{ music.artist }}</a></small>
 					</div>
+				</div>
+				<div>
+					BPM {{ music.bpm }}
 				</div>
 				<div class="genres">
 					{% for genre in music.genres %}
