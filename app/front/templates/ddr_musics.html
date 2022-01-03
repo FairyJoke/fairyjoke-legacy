@@ -27,7 +27,7 @@
 			<label>Style</label>
 		</div>
 		<div class="input-field col s9 m5">
-			<input type="text" name="text" placeholder="possession" id="text" value="{{ search.text or '' }}">
+			<input type="text" name="text" placeholder="possession" id="text" value="{{ search.text or search.artist or '' }}">
 			<label for="text">Text</label>
 		</div>
 		<div class="input-field col s3 m2">

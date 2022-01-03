@@ -29,7 +29,7 @@ async def sdvx_musics(
     text: str = Query(''),
     artist: str = Query(''),
 ):
-    query = db.session.query(Difficulty).join(Music)
+    query = db.session.query(Music).join(Difficulty)
     if level:
         query = query.filter(Difficulty.level.in_(map(int, level)))
     if genre:
@@ -47,13 +47,14 @@ async def sdvx_musics(
         )
     if artist:
         query = query.filter(Music.artist == artist)
-    query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query))
-    query = query.order_by(Music.id)
+    # query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query))
+    query = query.order_by(Music.id.desc())
+    query = query.distinct()
     pager = db.paginate(query, page)
     return templates.render(
         'sdvx_musics.html', req,
         pager=pager, genres=Genres,
-        search=dict(level=level, genre=genre, text=text),
+        search=dict(level=level, genre=genre, text=text, artist=artist),
     )
 
 

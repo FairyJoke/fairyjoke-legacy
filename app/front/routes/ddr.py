@@ -23,8 +23,7 @@ async def ddr_musics(
     style: List[Playstyles] = Query([Playstyles.SP]),
     artist: str = Query(''),
 ):
-    print(style)
-    query = db.session.query(Difficulty).join(Music)
+    query = db.session.query(Music).join(Difficulty)
     if text:
         text = text.strip()
         query = query.filter(
@@ -40,12 +39,12 @@ async def ddr_musics(
         )
     if artist:
         query = query.filter(Music.artist == artist)
-    query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query))
-    query = query.order_by(Music.id)
+    query = query.order_by(Music.id.desc())
+    query = query.distinct()
     pager = db.paginate(query, page)
     return templates.render(
         'ddr_musics.html', req, pager=pager, styles=Playstyles,
-        search=dict(level=level, style=style, text=text),
+        search=dict(level=level, style=style, text=text, artist=artist),
     )
 
 

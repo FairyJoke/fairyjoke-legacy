@@ -1,14 +1,15 @@
+{% set search = search or {} %}
 <ul class="pagination">
 	{% if pager.has_prev %}
-	<li class="waves-effect"><a href="?page={{ pager.prev_page }}"><i class="material-icons">chevron_left</i></a></li>
+		<li class="waves-effect"><a href="{{ url_for('', query={'page': pager.prev_page}, keep_args=True) }}"><i class="material-icons">chevron_left</i></a></li>
 	{% else %}
 	<li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
 	{% endif %}
 	{% for i in range(1, pager.pages + 1) %}
-	<li class="{{ 'active' if i == pager.page else 'waves-effect' }}"><a href="?page={{ i }}">{{ i }}</a></li>
+		<li class="{{ 'active' if i == pager.page else 'waves-effect' }}"><a href="{{ url_for('', query={'page': i}, keep_args=True) }}">{{ i }}</a></li>
 	{% endfor %}
 	{% if pager.has_next %}
-	<li class="waves-effect"><a href="?page={{ pager.next_page }}"><i class="material-icons">chevron_right</i></a></li>
+		<li class="waves-effect"><a href="{{ url_for('', query={'page': pager.next_page}, keep_args=True) }}"><i class="material-icons">chevron_right</i></a></li>
 	{% else %}
 	<li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
 	{% endif %}
