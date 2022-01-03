@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 
 from app import db, Schema
 from . import router, DATA_PATH
-from .models import Apeca, Difficulties, Music, Genres
+from .models import Apeca, Difficulties, Music
 
 
 class DifficultySchema(Schema):
@@ -12,9 +12,6 @@ class DifficultySchema(Schema):
     level: int
     illustrator: str
     effector: str
-
-    class Config:
-        orm_mode = True
 
 
 class MusicSchema(Schema):
@@ -25,9 +22,6 @@ class MusicSchema(Schema):
     release_date: date
     # genres: List[Genres]
     difficulties: List[DifficultySchema]
-
-    class Config:
-        orm_mode = True
 
 
 @router.get('/musics')

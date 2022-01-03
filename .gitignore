@@ -1,7 +1,8 @@
 # App
-/.venv
+.venv/
 /logs
 /import
+/imports
 *.db
 *.cfg
 /data/ddr_jackets

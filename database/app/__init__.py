@@ -1,6 +1,11 @@
 from pathlib import Path
 from fastapi import FastAPI, APIRouter
-from pydantic import BaseModel as Schema
+from pydantic import BaseModel
+
+
+class Schema(BaseModel):
+    class Config:
+        orm_mode = True
 
 
 class Router(APIRouter):

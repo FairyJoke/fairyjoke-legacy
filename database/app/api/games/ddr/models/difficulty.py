@@ -36,6 +36,10 @@ class DDRDifficulty(db.IdMixin, db.Base):
         return f'{self.short} {self.level}'
 
     @property
+    def name(self):
+        return self.diff.name
+
+    @property
     def short(self):
         return f'{self.diff.short}{self.playstyle.name}'
 

@@ -1,7 +1,20 @@
 import importlib
 from pathlib import Path
+from pydantic import Field
 
-from app import Router
+from app import Router, Schema
+
+
+class SeriesSchema(Schema):
+    name: str
+    short: str
+
+
+class GameSchema(Schema):
+    id: int
+    name: str
+    short: str
+    series: SeriesSchema
 
 
 router = Router(__name__)
