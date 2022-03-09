@@ -1,5 +1,6 @@
 from pathlib import Path
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
@@ -22,6 +23,13 @@ class Router(APIRouter):
 APP_DIR = Path(__file__).parent
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 from app import api, front
 
