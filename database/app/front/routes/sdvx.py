@@ -71,7 +71,7 @@ async def sdvx_apecas(req: Request, page: int = 1):
     return templates.render('sdvx_apecas.html', req, pager=pager)
 
 
-@router.get('/apeca/{apeca_id}')
+@router.get('/apecas/{apeca_id}')
 async def sdvx_apeca(apeca_id: int, req: Request):
     apeca = db.session.get(Apeca, apeca_id)
     return templates.render('sdvx_apeca.html', req, apeca=apeca)
