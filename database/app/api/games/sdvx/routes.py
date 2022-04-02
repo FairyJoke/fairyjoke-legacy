@@ -3,7 +3,7 @@ from typing import List
 from fastapi import HTTPException
 from fastapi.responses import FileResponse, RedirectResponse
 
-from app import db, Schema
+from app import db, config, Schema
 from . import router, DATA_PATH
 from .models import Apeca, Difficulties, Music
 
@@ -42,7 +42,7 @@ async def sdvx_get_music(music_id: int):
 
 
 @router.get('/musics/{music_id}/{difficulty}.png')
-async def sdvx_get_jacket(music_id: int, difficulty: Difficulties):
+async def sdvx_get_jacket(music_id: int, difficulty: Difficulties, fallback=False):
     music = db.session.get(Music, music_id)
     if not music:
         raise HTTPException(404)
@@ -50,6 +50,11 @@ async def sdvx_get_jacket(music_id: int, difficulty: Difficulties):
     if diff.external_jacket:
         return RedirectResponse(diff.external_jacket)
     path = DATA_PATH / 'music' / diff.music.folder / diff.filename
+    if not path.exists():
+        if fallback == 'default':
+            path = config.DATA_PATH / 'no_data.png'
+    if not path.exists():
+        raise HTTPException(404)
     return FileResponse(path)
 
 

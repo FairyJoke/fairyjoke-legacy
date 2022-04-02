@@ -5,7 +5,7 @@ from app import db
 
 
 class Series(db.Base):
-    name = sa.Column(sa.String)
+    name = sa.Column(sa.String, nullable=False)
     short = sa.Column(sa.String, primary_key=True)
 
     has_api = sa.Column(sa.Boolean)
@@ -17,7 +17,7 @@ class Series(db.Base):
 
 
 class Game(db.IdMixin, db.Base):
-    name = sa.Column(sa.String)
+    name = sa.Column(sa.String, nullable=False)
     short = sa.Column(sa.String, unique=True)
     series_short = sa.Column('series', sa.ForeignKey('series.short'))
     sort = sa.Column(sa.Integer)

@@ -153,8 +153,9 @@ if __name__ == '__main__':
             break
     else:
         datecode = sys.argv[3]
-    series = db.create(Series, short='sdvx')
-    version = db.create(Version, name=datecode, game=db.create(Game, short=game_name, series=series))
+    series = db.session.query(Series).filter_by(short='sdvx').one()
+    game = db.session.query(Game).filter_by(short=game_name, series=series).one()
+    version = db.create(Version, name=datecode, game=game)
     batch = db.add(ImportBatch, version=version, commit=False)
     fun(tree, batch)
     db.session.commit()
