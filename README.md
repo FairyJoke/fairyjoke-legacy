@@ -24,7 +24,7 @@ The plan is to allow sourcing the data either from game dumps or trustable sourc
 
 For some data such as a list of games and their release dates, I'm envisionning a folder with text files that users could contribute to easily on GitHub, see the [`import/games` folder in the 1.0 branch](https://github.com/Tina-otoge/FairyJokeAPI/tree/1.0/imports/games) for an example.
 
-## Running locally
+## Running locally (You will need at least Python3.9 for this)
 
 ```bash
 git clone https://github.com/Tina-otoge/FairyJokeAPI
