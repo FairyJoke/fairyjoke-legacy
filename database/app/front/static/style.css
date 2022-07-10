@@ -3,14 +3,15 @@
         --accent-lighter: #f06292;
 
 
-        --sdvx-nov: #BA55D3;
+        --sdvx-nov: #5A49FB;
         --sdvx-adv: #FFEC4A;
         --sdvx-exh: #F03C30;
-        --sdvx-mxm: #F5F5F5;
+        --sdvx-mxm: #ACACAC;
         --sdvx-inf: linear-gradient(to right, yellow,cyan,magenta);
         --sdvx-grv: #FF9E43;
         --sdvx-hvn: #7BDDFF;
         --sdvx-vvd: #FF4795;
+	--sdvx-xcd: #187FFF;
 
         --ddr-b: #64b5f6;
         --ddr-B: #ff9800;
@@ -108,6 +109,7 @@ a,
 .sdvx-diff-GRV { background: var(--sdvx-grv); }
 .sdvx-diff-HVN { background: var(--sdvx-hvn); }
 .sdvx-diff-VVD { background: var(--sdvx-vvd); color: #444; }
+.sdvx-diff-XCD { background: var(--sdvx-xcd); color: #444; }
 
 .ddr-diff-b { background: var(--ddr-b); }
 .ddr-diff-B { background: var(--ddr-B); }
