@@ -56,7 +56,7 @@ def upgrade():
     sa.Column('ascii', sa.String(), nullable=True),
     sa.Column('release_date', sa.Date(), nullable=True),
     sa.Column('background_type', sa.Integer(), nullable=True),
-    sa.Column('extra_difficulty', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'INF', 'GRV', 'HVN', 'VVD', name='sdvxdifficulties'), nullable=True),
+    sa.Column('extra_difficulty', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'INF', 'GRV', 'HVN', 'VVD' , 'XCD', name='sdvxdifficulties'), nullable=True),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_sdvx_musics')),
     sa.UniqueConstraint('label', name=op.f('uq_sdvx_musics_label'))
     )
@@ -88,7 +88,7 @@ def upgrade():
     op.create_table('sdvx_difficulties',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('music_id', sa.Integer(), nullable=True),
-    sa.Column('name', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'INF', 'GRV', 'HVN', 'VVD', name='sdvxdifficulties'), nullable=True),
+    sa.Column('name', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'INF', 'GRV', 'HVN', 'VVD', 'XCD', name='sdvxdifficulties'), nullable=True),
     sa.Column('level', sa.Integer(), nullable=True),
     sa.Column('illustrator', sa.String(), nullable=True),
     sa.Column('effector', sa.String(), nullable=True),
