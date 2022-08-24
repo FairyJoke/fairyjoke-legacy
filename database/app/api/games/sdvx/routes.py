@@ -1,6 +1,6 @@
 from datetime import date
 from typing import List
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
 from fastapi.responses import FileResponse, RedirectResponse
 
 from app import db, config, Schema
@@ -42,7 +42,7 @@ async def sdvx_get_music(music_id: int):
 
 
 @router.get('/musics/{music_id}/{difficulty}.png')
-async def sdvx_get_jacket(music_id: int, difficulty: Difficulties, fallback=False):
+async def sdvx_get_jacket(req: Request, music_id: int, difficulty: Difficulties, fallback=False):
     music = db.session.get(Music, music_id)
     if not music:
         raise HTTPException(404)
@@ -52,12 +52,22 @@ async def sdvx_get_jacket(music_id: int, difficulty: Difficulties, fallback=Fals
     path = DATA_PATH / 'music' / diff.music.folder / diff.filename
     if not path.exists():
         if fallback == 'default':
-            path = config.DATA_PATH / 'no_data.png'
+            return RedirectResponse(req.url_for('sdvx_default_jacket'))
         if fallback == 'game':
-            path = DATA_PATH / 'graphics' / 'jk_dummy.png'
+            return RedirectResponse(req.url_for('sdvx_default_version_jacket'))
     if not path.exists():
         raise HTTPException(404)
     return FileResponse(path)
+
+
+@router.get('/assets/jacket/version.png')
+async def sdvx_default_version_jacket():
+    return FileResponse(DATA_PATH / 'graphics' / 'jk_dummy.png')
+
+
+@router.get('/assets/jacket/no_data.png')
+async def sdvx_default_jacket():
+    return FileResponse(config.DATA_PATH / 'no_data.png')
 
 
 @router.get('/apecas/{apeca_id}.png')
