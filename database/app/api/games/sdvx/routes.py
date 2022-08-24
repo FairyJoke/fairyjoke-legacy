@@ -53,6 +53,8 @@ async def sdvx_get_jacket(music_id: int, difficulty: Difficulties, fallback=Fals
     if not path.exists():
         if fallback == 'default':
             path = config.DATA_PATH / 'no_data.png'
+        if fallback == 'game':
+            path = DATA_PATH / 'graphics' / 'jk_dummy_b.png'
     if not path.exists():
         raise HTTPException(404)
     return FileResponse(path)

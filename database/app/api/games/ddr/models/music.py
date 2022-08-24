@@ -25,6 +25,7 @@ class DDRMusic(db.BpmMixin, db.Base):
         17: 'Ace',
         18: 'A20',
         19: 'A20+',
+        20: 'A3',
     }
 
     id = sa.Column(sa.Integer, primary_key=True)

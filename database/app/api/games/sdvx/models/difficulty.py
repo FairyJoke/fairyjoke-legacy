@@ -15,6 +15,7 @@ class SDVXDifficulties(enum.Enum):
     GRV = 'GRAVITY'
     HVN = 'HEAVENLY'
     VVD = 'VIVID'
+    XCD = 'EXCEED'
 
     def __int__(self):
         return {

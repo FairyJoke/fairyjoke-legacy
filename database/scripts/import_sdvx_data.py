@@ -27,8 +27,8 @@ def get(node: ET.Element, key: str, coerce=str):
 
 
 TRANSLATION_TABLE = str.maketrans(
-    '曦曩齷罇驩驫騫齲齶骭龕黻齲齪',
-    'àèéêØāá♥♡ü€*♥♣'
+    '曦曩齷罇驩驫騫齲齶骭龕黻齲齪頽',
+    'àèéêØāá♥♡ü€*♥♣ä'
 )
 
 
@@ -50,6 +50,7 @@ def diffify(x: str):
         '3': Difficulties.GRV,
         '4': Difficulties.HVN,
         '5': Difficulties.VVD,
+        '6': Difficulties.XCD,
     }.get(x)
 
 def parse_music_db(tree, batch):
