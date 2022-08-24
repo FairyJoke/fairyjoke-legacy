@@ -48,7 +48,7 @@ async def sdvx_musics(
     if artist:
         query = query.filter(Music.artist == artist)
     # query = db.session.query(Music).filter(Music.id.in_(x.music_id for x in query))
-    query = query.order_by(Music.id.desc())
+    query = query.order_by(Music.release_date.desc())
     query = query.distinct()
     pager = db.paginate(query, page)
     return templates.render(
