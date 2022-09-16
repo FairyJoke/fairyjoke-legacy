@@ -66,6 +66,7 @@ def diffify(x: str):
         '3': Difficulties.GRV,
         '4': Difficulties.HVN,
         '5': Difficulties.VVD,
+        '6': Difficulties.XCD,
     }.get(x)
 
 def parse_music_db(tree, batch):
