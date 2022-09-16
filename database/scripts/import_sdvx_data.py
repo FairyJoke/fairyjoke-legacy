@@ -26,14 +26,36 @@ def get(node: ET.Element, key: str, coerce=str):
     )
 
 
-TRANSLATION_TABLE = str.maketrans(
-    '曦曩齷罇驩驫騫齲齶骭龕黻齲齪頽',
-    'àèéêØāá♥♡ü€*♥♣ä'
-)
+TRANSLATION_TABLE = {
+  "龕": "€",
+  "釁": "🍄",
+  "驩": "Ø",
+  "曦": "à",
+  "齷": "é",
+  "骭": "ü",
+  "齶": "♡",
+  "彜": "ū",
+  "罇": "ê",
+  "雋": "Ǜ",
+  "鬻": "♃",
+  "鬥": "Ã",
+  "鬆": "Ý",
+  "曩": "è",
+  "驫": "ā",
+  "齲": "♥",
+  "騫": "á",
+  "趁": "Ǣ",
+  "鬮": "¡",
+  "盥": "⚙︎",
+  "隍": "︎Ü",
+  "頽": "ä"
+}
 
 
 def translate(x: str):
-    return x.translate(TRANSLATION_TABLE)
+    for old, new in TRANSLATION_TABLE.items():
+        x = x.replace(old, new)
+    return x
 
 
 def bpmify(x: str):
