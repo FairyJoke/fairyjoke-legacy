@@ -26,29 +26,35 @@ def get(node: ET.Element, key: str, coerce=str):
     )
 
 
+TRANSLATION_TABLE = {
+  "龕": "€",
+  "釁": "🍄",
+  "驩": "Ø",
+  "曦": "à",
+  "齷": "é",
+  "骭": "ü",
+  "齶": "♡",
+  "彜": "ū",
+  "罇": "ê",
+  "雋": "Ǜ",
+  "鬻": "♃",
+  "鬥": "Ã",
+  "鬆": "Ý",
+  "曩": "è",
+  "驫": "ā",
+  "齲": "♥",
+  "騫": "á",
+  "趁": "Ǣ",
+  "鬮": "¡",
+  "盥": "⚙︎",
+  "隍": "︎Ü",
+  "頽": "ä"
+}
+
+
 def translate(x: str):
-    x = x.replace("龕", "€")
-    x = x.replace("釁", "🍄")
-    x = x.replace("驩", "Ø")
-    x = x.replace("曦", "à")
-    x = x.replace("齷", "é")
-    x = x.replace("骭", "ü")
-    x = x.replace("齶", "♡")
-    x = x.replace("彜", "ū")
-    x = x.replace("罇", "ê")
-    x = x.replace("雋", "Ǜ")
-    x = x.replace("鬻", "♃")
-    x = x.replace("鬥", "Ã")
-    x = x.replace("鬆", "Ý")
-    x = x.replace("曩", "è")
-    x = x.replace("驫", "ā")
-    x = x.replace("齲", "♥")
-    x = x.replace("騫", "á")
-    x = x.replace("趁", "Ǣ")
-    x = x.replace("鬮", "¡")
-    x = x.replace("盥", "⚙︎")
-    x = x.replace("隍", "︎Ü")
-    x = x.replace("頽", "ä")
+    for old, new in TRANSLATION_TABLE.items():
+        x = x.replace(old, new)
     return x
 
 
