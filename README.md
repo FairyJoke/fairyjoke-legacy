@@ -11,7 +11,7 @@ used into other projects without scrapping web pages.
 
 ## Cool features
 
-- Easy to use [API](https://fairyjoke.tina.moe/docs).
+- Easy to use [API](https://fairyjoke.net/docs).
 
 - Search
 
