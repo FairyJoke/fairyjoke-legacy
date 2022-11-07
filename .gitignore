@@ -1,4 +1,6 @@
 /.venv/
+*.pyc
+
 *.db
 *.sqlite
 /tmp/
