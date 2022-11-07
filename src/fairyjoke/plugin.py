@@ -65,7 +65,7 @@ class Plugin:
             set."""
             if getattr(self, target) is not None:
                 return
-            setattr(self, attr, _get_module(self.path, module, attr))
+            setattr(self, target, _get_module(self.path, module, attr))
 
         _load("api", "api", "router")
         _load("frontend", "frontend", "router")
