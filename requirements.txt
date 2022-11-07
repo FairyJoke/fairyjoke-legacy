@@ -1,0 +1,5 @@
+FastAPI
+SQLAlchemy
+uvicorn
+setuptools_scm
+git+https://github.com/Tina-otoge/default-sqlalchemy-setup

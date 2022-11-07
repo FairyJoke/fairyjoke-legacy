@@ -1,23 +1,4 @@
-# App
-.venv/
-/logs
-/import
-/imports
+/.venv/
 *.db
-*.db.*
-*.cfg
-*.xml
-
-# Config
-/.secretenv
-
-# Webassets
-.webassets-cache/
-
-# Python stuff
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Scripts
-*laffey*.sh
+*.sqlite
+/tmp/

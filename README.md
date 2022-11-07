@@ -34,29 +34,6 @@ the
 [`import/games` folder in the 1.0 branch](https://github.com/Tina-otoge/FairyJokeAPI/tree/1.0/imports/games)
 for an example.
 
-## Running locally (API and frontend)
-
-```bash
-git clone https://github.com/Tina-otoge/FairyJokeAPI
-cd FairyJokeAPI/database
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-alembic upgrade head
-uvicorn app:app --reload
-```
-
-Or alternatively
-
-```bash
-git clone https://github.com/Tina-otoge/FairyJokeAPI
-cd FairyJokeAPI/database
-./scripts/run.sh
-```
-
-Not tested but it should work on Windows, just do `.\venv\Scripts\Activate.ps1`
-instead.
-
 ## Contributing
 
 Please do. The project is nicely splitted into smaller modules to make it easier

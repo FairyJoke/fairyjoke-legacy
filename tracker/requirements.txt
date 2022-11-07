@@ -1,8 +1,0 @@
-fastapi
-sqlalchemy
-sqlalchemy_utils
-alembic
-
-requests
-
-uvicorn[standard]
