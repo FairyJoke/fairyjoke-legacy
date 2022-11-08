@@ -1,7 +1,7 @@
 active: true
 name: pop'n music
 group: BEMANI
-versions:
+games:
   1:
     name: pop'n music
     releases:

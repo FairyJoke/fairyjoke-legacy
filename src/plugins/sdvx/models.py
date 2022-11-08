@@ -1,8 +1,7 @@
 import sqlalchemy as sa
 
-from fairyjoke import db
-
+from fairyjoke import Plugin
 
 # TODO
-class Song(db.Base):
-    title = sa.Column(sa.String)
+# class Song(Plugin.db.Base):
+#     title = sa.Column(sa.String)

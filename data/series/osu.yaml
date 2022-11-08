@@ -1,8 +1,9 @@
 active: true
 name: osu!
-versions:
+games:
   osu:
     name: osu!
+    date: 2007-09-16
     releases:
       - date: 2007-09-16
         platform: pc

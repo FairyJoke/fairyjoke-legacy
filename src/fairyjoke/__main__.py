@@ -1,13 +1,14 @@
+import shutil
 from argparse import ArgumentParser
 
 import uvicorn
 
-import fairyjoke
+from fairyjoke import TMP_PATH, App
 
 
 def run():
     uvicorn.run(
-        "fairyjoke:create_app",
+        "fairyjoke:App",
         factory=True,
         host="0.0.0.0",
         port=8000,
@@ -22,7 +23,8 @@ parser.add_argument("action", choices=["init", "run"], default="run", nargs="?")
 args = parser.parse_args()
 
 if args.init or args.action == "init":
-    fairyjoke.init()
+    shutil.rmtree(TMP_PATH, ignore_errors=True)
+    App.init()
 
 if args.action == "run":
     run()

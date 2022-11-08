@@ -1,8 +1,9 @@
 active: false
 name: In The Groove
-versions:
-  ITG:
+games:
+  1:
     name: In The Groove
+    date: 2004-08-30
     releases:
       - date: 2004-08-30
         platform: arcade
@@ -16,8 +17,8 @@ versions:
       - date: 2006-08-21
         platform: pc
         region: EU
-  ITG2:
+  2:
     name: In The Groove 2
     releases:
-      - date: 2005-06-18
-        platform: arcade
+      date: 2005-06-18
+      platform: arcade

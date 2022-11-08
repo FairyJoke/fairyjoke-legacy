@@ -1,7 +1,7 @@
 active: true
 group: BEMANI
 name: SOUND VOLTEX
-versions:
+games:
   booth:
     name: SOUND VOLTEX BOOTH
     releases:

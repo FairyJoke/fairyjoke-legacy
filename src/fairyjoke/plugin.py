@@ -1,10 +1,12 @@
 import importlib
 import os
+import time
 import typing as t
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from fairyjoke import APP_PATH
 
@@ -31,6 +33,22 @@ class Plugin:
     api: APIRouter = None
     frontend: APIRouter = None
     init: t.Callable = None
+    current: "Plugin" = None
+
+    @classmethod
+    @contextmanager
+    def use(cls, plugin=None):
+        """A context manager that sets the current plugin to `plugin`.
+
+        ```
+        with Plugin.use(plugin):
+            # do stuff
+        ```
+        TODO: register this to be called in each route of the plugin's routers
+        """
+        cls.current = plugin
+        yield
+        cls.current = None
 
     @classmethod
     def from_path(cls, path):
@@ -67,7 +85,42 @@ class Plugin:
                 return
             setattr(self, target, _get_module(self.path, module, attr))
 
-        _load("api", "api", "router")
-        _load("frontend", "frontend", "router")
-        _load("init", "import", "main")
-        _get_module(self.path, "models")
+        with self.use(self):
+            _load("api", "api", "router")
+            _load("frontend", "frontend", "router")
+            _load("init", "init", "main")
+            _get_module(self.path, "models")
+
+    def run_init(self):
+        """Run the plugin's init function."""
+        if not self.init:
+            return
+        print(f'Running init for "{self.name}"')
+        now = time.time()
+        with self.use(self):
+            self.init()
+        delta = time.time() - now
+        print(f'Finished init for "{self.name}" in {delta:.2f}s')
+
+    @classmethod
+    @property
+    def data(cls):
+        from fairyjoke import Data
+
+        return Data(cls.current.name)
+
+    @classmethod
+    @property
+    def db(cls):
+        from fairyjoke import Database
+
+        return Database.get(cls.current.name)
+
+    class Router(APIRouter):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.plugin = Plugin.current
+            self.dependencies.append(Depends(self._set_current))
+
+        def _set_current(self):
+            Plugin.current = self.plugin
