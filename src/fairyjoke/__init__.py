@@ -17,7 +17,10 @@ __version__ = setuptools_scm.get_version(
     local_scheme=lambda x: f"+branch={x.branch},commit={x.node}",
 )
 
-from fairyjoke.plugin import Plugin
+
+# isort: off
+from fairyjoke.pool import Pool as Pool
+from fairyjoke.plugin import Plugin as Plugin
 
 
 class Database(_Database):
@@ -46,9 +49,8 @@ def get_plugins(path: Path) -> list[Plugin]:
         if not path.is_dir():
             continue
         plugin = Plugin.from_path(path)
-        with Plugin.use(plugin):
-            plugin.load()
-            yield plugin
+        plugin.load()
+        yield plugin
 
 
 class App(FastAPI):
@@ -61,16 +63,7 @@ class App(FastAPI):
             *self.external_plugins,
         ]
         for plugin in self.plugins:
-            with Plugin.use(plugin):
-                self.mount(plugin)
-
-        self.middleware("http")(self._unload_current_plugin)
-
-    async def _unload_current_plugin(self, request, call_next):
-        """Unloads the current plugin after the request is handled."""
-        response = await call_next(request)
-        Plugin.current = None
-        return response
+            self.mount(plugin)
 
     def _init(self):
         # TODO parallelize init, may need dependency resolution for prioritization

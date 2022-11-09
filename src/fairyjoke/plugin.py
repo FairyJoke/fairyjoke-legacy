@@ -1,4 +1,5 @@
 import importlib
+import inspect
 import os
 import time
 import typing as t
@@ -8,7 +9,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends
 
-from fairyjoke import APP_PATH
+from fairyjoke import APP_PATH, Pool
 
 
 def _get_module(path, submodule=None, attr=None):
@@ -27,28 +28,34 @@ def _get_module(path, submodule=None, attr=None):
 
 
 @dataclass
-class Plugin:
+class Plugin(Pool):
     name: str = None
     path: Path = None
     api: APIRouter = None
     frontend: APIRouter = None
     init: t.Callable = None
-    current: "Plugin" = None
 
     @classmethod
-    @contextmanager
-    def use(cls, plugin=None):
-        """A context manager that sets the current plugin to `plugin`.
+    @property
+    def current(cls) -> "Plugin":
+        """Returns the plugin that is currently being executed by examining the
+        Python calling stack."""
 
-        ```
-        with Plugin.use(plugin):
-            # do stuff
-        ```
-        TODO: register this to be called in each route of the plugin's routers
-        """
-        cls.current = plugin
-        yield
-        cls.current = None
+        stack = [
+            Path(frame.filename)
+            for frame in inspect.stack()
+            if frame.filename[0] == "/"
+        ]
+        stack = [
+            path.relative_to(APP_PATH)
+            for path in stack
+            if path.is_relative_to(APP_PATH)
+        ]
+        for plugin_path in cls.pool:
+            for frame_path in stack:
+                if frame_path.is_relative_to(plugin_path):
+                    return cls.pool[plugin_path]
+        raise ValueError("No plugin found in stack")
 
     @classmethod
     def from_path(cls, path):
@@ -78,6 +85,8 @@ class Plugin:
         if not self.name:
             self.name = self.path.parts[-1]
 
+        self.pool[self.path] = self
+
         def _load(target, module, attr=None):
             """Loads submodule `module` to self.`target` if it is not already
             set."""
@@ -85,11 +94,10 @@ class Plugin:
                 return
             setattr(self, target, _get_module(self.path, module, attr))
 
-        with self.use(self):
-            _load("api", "api", "router")
-            _load("frontend", "frontend", "router")
-            _load("init", "init", "main")
-            _get_module(self.path, "models")
+        _load("api", "api", "router")
+        _load("frontend", "frontend", "router")
+        _load("init", "init", "main")
+        _get_module(self.path, "models")
 
     def run_init(self):
         """Run the plugin's init function."""
@@ -97,14 +105,14 @@ class Plugin:
             return
         print(f'Running init for "{self.name}"')
         now = time.time()
-        with self.use(self):
-            self.init()
+        self.init()
         delta = time.time() - now
         print(f'Finished init for "{self.name}" in {delta:.2f}s')
 
     @classmethod
     @property
     def data(cls):
+        """Get data/ for the current plugin."""
         from fairyjoke import Data
 
         return Data(cls.current.name)
@@ -120,7 +128,3 @@ class Plugin:
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.plugin = Plugin.current
-            self.dependencies.append(Depends(self._set_current))
-
-        def _set_current(self):
-            Plugin.current = self.plugin
