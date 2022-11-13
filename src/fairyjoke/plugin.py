@@ -3,21 +3,28 @@ import inspect
 import os
 import time
 import typing as t
-from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
+from jinja2 import ChoiceLoader, Environment, PackageLoader, select_autoescape
 
-from fairyjoke import APP_PATH, Pool
+from fairyjoke import APP_PATH
+from fairyjoke.pool import Pool
 
 
-def _get_module(path, submodule=None, attr=None):
+def _get_module_str(path, submodule):
     if isinstance(path, Path):
         path = str(path)
     module_str = ".".join(path.split(os.sep))
     if submodule:
         module_str += "." + submodule
+    return module_str
+
+
+def _get_module(path, submodule=None, attr=None):
+    module_str = _get_module_str(path, submodule)
     try:
         module = importlib.import_module(module_str)
     except ModuleNotFoundError:
@@ -34,6 +41,17 @@ class Plugin(Pool):
     api: APIRouter = None
     frontend: APIRouter = None
     init: t.Callable = None
+    prepare: t.Callable = None
+
+    templating: Environment = None
+
+    @property
+    def module_str(self) -> str:
+        return str(self.path).replace(os.sep, ".")
+
+    @property
+    def relative_path(self):
+        return APP_PATH / self.path
 
     @classmethod
     @property
@@ -58,6 +76,30 @@ class Plugin(Pool):
         raise ValueError("No plugin found in stack")
 
     @classmethod
+    def _pool_pre_get(cls, key):
+        return Path(key)
+
+    @classmethod
+    def _pool_create(cls, key):
+        return cls.from_path(key)
+
+    @classmethod
+    def iter(cls, path: Path) -> t.Iterator["Plugin"]:
+        """Fetches plugins at a path.
+
+        Assumes that every subdirectory of `path` is a plugin."""
+
+        for path in path.glob("*/"):
+            # Trailing slash to match only dirs is only available in Python 3.11+
+            # https://docs.python.org/3/library/pathlib.html#pathlib.Path.glob
+            # We can remove this check when we drop support for Python 3.10
+            if not path.is_dir():
+                continue
+            plugin = Plugin.from_path(path)
+            plugin.load()
+            yield plugin
+
+    @classmethod
     def from_path(cls, path):
         """Load a plugin from a path.
 
@@ -69,6 +111,10 @@ class Plugin(Pool):
         if not path.is_absolute():
             path = APP_PATH / path
         path = path.relative_to(APP_PATH)
+
+        if path in cls.pool:
+            return cls.get(path)
+
         if (path / "__init__.py").exists():
             module = _get_module(path)
             if hasattr(module, "plugin"):
@@ -87,6 +133,17 @@ class Plugin(Pool):
 
         self.pool[self.path] = self
 
+        if not self.templating and (self.relative_path / "templates").exists():
+            self.templating = Environment(
+                loader=ChoiceLoader(
+                    [
+                        PackageLoader(self.module_str),
+                        PackageLoader("fairyjoke"),
+                    ]
+                ),
+                autoescape=select_autoescape(),
+            )
+
         def _load(target, module, attr=None):
             """Loads submodule `module` to self.`target` if it is not already
             set."""
@@ -97,17 +154,26 @@ class Plugin(Pool):
         _load("api", "api", "router")
         _load("frontend", "frontend", "router")
         _load("init", "init", "main")
+        _load("prepare", "prepare", "main")
         _get_module(self.path, "models")
+
+    def _run_func(self, name):
+        func = getattr(self, name)
+        if not func:
+            return
+        print(f'Running {name} for "{self.name}"')
+        now = time.time()
+        func()
+        delta = time.time() - now
+        print(f'Finished running {name} for "{self.name}" in {delta:.2f}s')
 
     def run_init(self):
         """Run the plugin's init function."""
-        if not self.init:
-            return
-        print(f'Running init for "{self.name}"')
-        now = time.time()
-        self.init()
-        delta = time.time() - now
-        print(f'Finished init for "{self.name}" in {delta:.2f}s')
+        self._run_func("init")
+
+    def run_prepare(self):
+        """Run the plugin's prepare function."""
+        self._run_func("prepare")
 
     @classmethod
     @property
@@ -128,3 +194,13 @@ class Plugin(Pool):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.plugin = Plugin.current
+
+        def template(self, template="index.html", context={}, **kwargs):
+            context |= kwargs
+            return self.plugin.templating.get_template(template).render(
+                **context
+            )
+
+        def html(self, *args, **kwargs):
+            kwargs.setdefault("response_class", HTMLResponse)
+            return self.get(*args, **kwargs)

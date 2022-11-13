@@ -1,4 +1,5 @@
 FastAPI
+jinja2
 SQLAlchemy
 uvicorn
 setuptools_scm

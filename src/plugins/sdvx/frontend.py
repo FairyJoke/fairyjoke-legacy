@@ -1,5 +1,5 @@
-from fastapi import APIRouter
+from fairyjoke import Plugin
 
-router = APIRouter()
+router = Plugin.Router()
 
 # TODO

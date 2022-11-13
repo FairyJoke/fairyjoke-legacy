@@ -12,6 +12,11 @@
             "label": "Init data",
             "type": "shell",
             "command": "PYTHONPATH=src ./.venv/bin/python -m src.fairyjoke init",
+        },
+        {
+            "label": "Prepare data",
+            "type": "shell",
+            "command": "PYTHONPATH=src ./.venv/bin/python -m src.fairyjoke prepare",
         }
     ]
 }
