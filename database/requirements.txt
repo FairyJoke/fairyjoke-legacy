@@ -1,6 +1,6 @@
 fastapi
 
-SQLAlchemy[mypy]
+SQLAlchemy[mypy]<2.0
 SQLAlchemy-Utils
 alembic #dev
 
