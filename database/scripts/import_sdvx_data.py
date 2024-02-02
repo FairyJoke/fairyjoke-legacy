@@ -102,6 +102,7 @@ def parse_music_db(tree, batch):
                 'background_type':  get(info, 'bg_no', int),
                 'genre_mask':       get(info, 'genre', int),
                 'extra_difficulty': get(info, 'inf_ver', diffify),
+                'version':          get(info, 'version', int),
             },
             commit=False,
             update=True,

@@ -1,22 +1,23 @@
 from pathlib import Path
-from fastapi import FastAPI, APIRouter
+
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
 class Schema(BaseModel):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Router(APIRouter):
     def __init__(self, module: str, prefix=True):
-        module = module.removeprefix(__name__).removeprefix('.')
-        self.short_prefix = module.split('.')[-1]
+        module = module.removeprefix(__name__).removeprefix(".")
+        self.short_prefix = module.split(".")[-1]
         if prefix is True:
-            prefix = '/' + self.short_prefix
+            prefix = "/" + self.short_prefix
         elif not prefix:
-            prefix = ''
+            prefix = ""
         super().__init__(prefix=prefix)
 
 
@@ -25,10 +26,10 @@ APP_DIR = Path(__file__).parent
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*']
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 from app import api, front
