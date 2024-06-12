@@ -48,6 +48,7 @@ async def sdvx_get_jacket(
     music_id: int,
     difficulty: Difficulties,
     fallback=False,
+    size=None,
 ):
     music = db.session.get(Music, music_id)
     if not music:
@@ -56,7 +57,13 @@ async def sdvx_get_jacket(
     if diff.external_jacket:
         return RedirectResponse(diff.external_jacket)
     folder = DATA_PATH / "music" / diff.music.folder
-    path = folder / diff.filename
+
+    if size and size == "big":
+        filename = diff.jacket_big
+    else:
+        filename = diff.filename
+    path = folder / filename
+
     if not path.exists():
         if fallback == "default":
             return RedirectResponse(req.url_for("sdvx_default_jacket"))

@@ -71,6 +71,10 @@ class SDVXDifficulty(db.IdMixin, db.Base):
         return self.get_filename()
 
     @property
+    def jacket_big(self):
+        return self.get_filename(size="b")
+
+    @property
     def games(self):
         return {x.batch.version.game for x in self.imports}
 
