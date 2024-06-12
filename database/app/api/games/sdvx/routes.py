@@ -77,7 +77,7 @@ async def sdvx_get_jacket(
 
 @router.get("/assets/jacket/version.png")
 async def sdvx_default_version_jacket():
-    path = DATA_PATH / "graphics" / "jk_version.png"
+    path = DATA_PATH / "graphics" / "jk_dummy.png"
     if not path.exists():
         raise HTTPException(404)
     return FileResponse(path)
