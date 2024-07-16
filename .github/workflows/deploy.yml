@@ -1,0 +1,19 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    uses: Tina-otoge/infra/.github/workflows/deploy-workflow.yml@master
+    with:
+      app: FairyJokeAPI
+      service: fairyjoke
+    secrets:
+      host: "${{ secrets.DEPLOY_HOST }}"
+      user: "${{ secrets.DEPLOY_USER }}"
+      key: "${{ secrets.DEPLOY_KEY }}"
+      login_user: "${{ secrets.DEPLOY_LOGIN_USER }}"
+      webhook_url: "${{ secrets.WEBHOOK_URL }}"
