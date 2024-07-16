@@ -1,4 +1,10 @@
-# FairyJokeAPI
+# fairyjoke-legacy (formerly FairyJokeAPI)
+
+## Deprecation warning ⚠️
+
+While still receiving maintenance updates, this project is being sunset in favor of the modular approach rewrite at [FairyJoke/fairyjoke-api](https://github.com/FairyJoke/fairyjoke-api), that uses an extensive plugin system for games.
+
+## Motivation
 
 FairyJoke is a rhythm games database project with a public API.
 
