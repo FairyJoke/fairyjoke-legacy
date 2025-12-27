@@ -10,6 +10,7 @@ class SDVXDifficulties(enum.Enum):
     ADV = "ADVANCED"
     EXH = "EXHAUST"
     MXM = "MAXIMUM"
+    ULT = "ULTIMATE"
 
     INF = "INFINITE"
     GRV = "GRAVITY"

@@ -7,6 +7,8 @@
         --sdvx-adv: #FFEC4A;
         --sdvx-exh: #F03C30;
         --sdvx-mxm: #F5F5F5;
+        --sdvx-ult: linear-gradient(to right, yellow,gold, yellow);
+
         --sdvx-inf: linear-gradient(to right, yellow,cyan,magenta);
         --sdvx-grv: #FF9E43;
         --sdvx-hvn: #7BDDFF;
@@ -105,6 +107,7 @@ a,
 .sdvx-diff-ADV { background: var(--sdvx-adv); color: #444; }
 .sdvx-diff-EXH { background: var(--sdvx-exh); }
 .sdvx-diff-MXM { background: var(--sdvx-mxm); color: #444; }
+.sdvx-diff-ULT { background: var(--sdvx-ult); }
 .sdvx-diff-INF { background: var(--sdvx-inf); color: #444; }
 .sdvx-diff-GRV { background: var(--sdvx-grv); }
 .sdvx-diff-HVN { background: var(--sdvx-hvn); }
