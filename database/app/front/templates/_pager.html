@@ -1,16 +1,50 @@
 {% set search = search or {} %}
 <ul class="pagination">
-	{% if pager.has_prev %}
-		<li class="waves-effect"><a href="{{ url_for('', query={'page': pager.prev_page}, keep_args=True) }}"><i class="material-icons">chevron_left</i></a></li>
-	{% else %}
-	<li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
-	{% endif %}
-	{% for i in range(1, pager.pages + 1) %}
-		<li class="{{ 'active' if i == pager.page else 'waves-effect' }}"><a href="{{ url_for('', query={'page': i}, keep_args=True) }}">{{ i }}</a></li>
-	{% endfor %}
-	{% if pager.has_next %}
-		<li class="waves-effect"><a href="{{ url_for('', query={'page': pager.next_page}, keep_args=True) }}"><i class="material-icons">chevron_right</i></a></li>
-	{% else %}
-	<li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-	{% endif %}
+
+    {% if pager.has_prev %}
+        <li class="waves-effect">
+            <a href="{{ url_for('', query={'page': pager.prev_page}, keep_args=True) }}">
+                <i class="material-icons">chevron_left</i>
+            </a>
+        </li>
+    {% else %}
+        <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+
+    <li class="{{ 'active' if pager.page == 1 else 'waves-effect' }}">
+        <a href="{{ url_for('', query={'page': 1}, keep_args=True) }}">1</a>
+    </li>
+
+    {% if pager.page > 4 %}
+        <li class="disabled"><a>…</a></li>
+    {% endif %}
+
+    {% for i in range(pager.page - 2, pager.page + 3) %}
+        {% if 1 < i < pager.pages %}
+            <li class="{{ 'active' if i == pager.page else 'waves-effect' }}">
+                <a href="{{ url_for('', query={'page': i}, keep_args=True) }}">{{ i }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+
+    {% if pager.page < pager.pages - 3 %}
+        <li class="disabled"><a>…</a></li>
+    {% endif %}
+
+    {% if pager.pages > 1 %}
+        <li class="{{ 'active' if pager.page == pager.pages else 'waves-effect' }}">
+            <a href="{{ url_for('', query={'page': pager.pages}, keep_args=True) }}">{{ pager.pages }}</a>
+        </li>
+    {% endif %}
+
+    {% if pager.has_next %}
+        <li class="waves-effect">
+            <a href="{{ url_for('', query={'page': pager.next_page}, keep_args=True) }}">
+                <i class="material-icons">chevron_right</i>
+            </a>
+        </li>
+    {% else %}
+        <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
+
 </ul>
