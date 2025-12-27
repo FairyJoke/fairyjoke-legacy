@@ -1,8 +1,8 @@
 """
 
-Revision ID: 56214abb3e18
+Revision ID: 2d2e04e6967a
 Revises: 
-Create Date: 2024-02-02 15:04:25.869828
+Create Date: 2025-12-27 22:05:01.163671
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '56214abb3e18'
+revision = '2d2e04e6967a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -48,7 +48,6 @@ def upgrade():
     sa.Column('bpm_min', sa.Float(), nullable=True),
     sa.Column('bpm_max', sa.Float(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('label', sa.String(), nullable=True),
     sa.Column('title', sa.String(), nullable=True),
     sa.Column('title_yomigana', sa.String(), nullable=True),
     sa.Column('artist', sa.String(), nullable=True),
@@ -56,10 +55,9 @@ def upgrade():
     sa.Column('ascii', sa.String(), nullable=True),
     sa.Column('release_date', sa.Date(), nullable=True),
     sa.Column('background_type', sa.Integer(), nullable=True),
-    sa.Column('extra_difficulty', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'INF', 'GRV', 'HVN', 'VVD', 'XCD', name='sdvxdifficulties'), nullable=True),
+    sa.Column('extra_difficulty', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'ULT', 'INF', 'GRV', 'HVN', 'VVD', 'XCD', name='sdvxdifficulties'), nullable=True),
     sa.Column('version', sa.Integer(), nullable=True),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_sdvx_musics')),
-    sa.UniqueConstraint('label', name=op.f('uq_sdvx_musics_label'))
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_sdvx_musics'))
     )
     op.create_table('series',
     sa.Column('name', sa.String(), nullable=False),
@@ -89,7 +87,7 @@ def upgrade():
     op.create_table('sdvx_difficulties',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('music_id', sa.Integer(), nullable=True),
-    sa.Column('name', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'INF', 'GRV', 'HVN', 'VVD', 'XCD', name='sdvxdifficulties'), nullable=True),
+    sa.Column('name', sa.Enum('NOV', 'ADV', 'EXH', 'MXM', 'ULT', 'INF', 'GRV', 'HVN', 'VVD', 'XCD', name='sdvxdifficulties'), nullable=True),
     sa.Column('level', sa.Integer(), nullable=True),
     sa.Column('illustrator', sa.String(), nullable=True),
     sa.Column('effector', sa.String(), nullable=True),

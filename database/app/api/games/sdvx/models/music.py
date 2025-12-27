@@ -46,7 +46,8 @@ class SDVXMusicGenre(db.IdMixin, db.Base):
 
 class SDVXMusic(db.BpmMixin, db.Base):
     id = sa.Column(sa.Integer, primary_key=True)
-    label = sa.Column(sa.String, unique=True)
+    # removed in 2025-11-19
+    # label = sa.Column(sa.String, unique=True)
     title = sa.Column(sa.String)
     title_yomigana = sa.Column(sa.String)
     artist = sa.Column(sa.String)

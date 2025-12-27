@@ -95,7 +95,8 @@ def parse_music_db(tree, batch):
             Music,
             {"id": music_id},
             {
-                "label": get(info, "label"),
+                # removed in 2025-11-19
+                # "label": get(info, "label"),
                 "title": get(info, "title_name"),
                 "title_yomigana": get(info, "title_yomigana"),
                 "artist": get(info, "artist_name"),
