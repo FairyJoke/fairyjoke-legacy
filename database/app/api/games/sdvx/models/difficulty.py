@@ -24,6 +24,7 @@ class SDVXDifficulties(enum.Enum):
             self.ADV: 2,
             self.EXH: 3,
             self.MXM: 5,
+            self.ULT: 6,
         }.get(self, 4)
 
     def __str__(self):
